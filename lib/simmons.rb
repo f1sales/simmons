@@ -15,8 +15,8 @@ module Simmons
       end
 
       def switch_salesman(lead)
-        store_group, store_name = parse_lead(lead)
-        { email: "#{emailize(store_group)}_#{emailize(store_name)}@simmons.com.br" }
+        _, store_name = parse_lead(lead)
+        { email: "#{emailize(store_name)}@simmons.com.br" }
       end
 
       def parse_lead(lead)
@@ -25,7 +25,7 @@ module Simmons
       end
 
       def emailize(string)
-        string.gsub(' ', '').downcase
+        string.dup.force_encoding('UTF-8').unicode_normalize(:nfkd).encode('ASCII', replace: '').downcase.gsub(/\W+/, '')
       end
 
       def parse_message(message)

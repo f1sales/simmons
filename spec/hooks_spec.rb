@@ -23,7 +23,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
 
     it 'returns salesman email' do
-      expect(described_class.switch_salesman(lead)).to eq({ email: 'boutiquedossonhos_avininga1201@simmons.com.br' })
+      expect(described_class.switch_salesman(lead)).to eq({ email: 'avininga1201@simmons.com.br' })
     end
   end
 end
