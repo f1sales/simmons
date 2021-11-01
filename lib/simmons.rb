@@ -29,7 +29,8 @@ module Simmons
       end
 
       def parse_message(message)
-        Hash[message.split('; ').map { |s| s.split(': ') }]
+        # Hash[message.split('; ').map { |s| s.split(': ') }]
+        {'loja' => message }
       end
     end
   end
