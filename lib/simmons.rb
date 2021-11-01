@@ -21,7 +21,7 @@ module Simmons
 
       def parse_lead(lead)
         message = lead.message
-        (parse_message(message)['loja'] || '').split('-')
+        (parse_message(message)['conditional_question_3'] || '').split('-')
       end
 
       def emailize(string)
