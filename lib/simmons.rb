@@ -15,9 +15,8 @@ module Simmons
       end
 
       def switch_salesman(lead)
-        # _, store_name = parse_lead(lead)
-        # { email: "#{emailize(store_name)}@simmons.com.br" }
-        {}
+        _, store_name = parse_lead(lead)
+        { email: "#{emailize(store_name)}@simmons.com.br" }
       end
 
       def parse_lead(lead)
@@ -30,8 +29,7 @@ module Simmons
       end
 
       def parse_message(message)
-        # Hash[message.split('; ').map { |s| s.split(': ') }]
-        {'loja' => message }
+        Hash[message.split('; ').map { |s| s.split(': ') }]
       end
     end
   end
