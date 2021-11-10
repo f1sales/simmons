@@ -15,7 +15,7 @@ GIT
 PATH
   remote: .
   specs:
-    simmons (0.1.0)
+    simmons (0.2.3)
 
 GEM
   remote: https://rubygems.org/

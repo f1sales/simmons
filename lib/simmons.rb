@@ -9,6 +9,8 @@ module Simmons
   class F1SalesCustom::Hooks::Lead
     class << self
       def switch_source(lead)
+        return lead.source.name unless lead.source.name.include?('Facebook')
+
         store_group, = parse_lead(lead)
 
         "#{lead.source.name} - #{store_group}"
@@ -20,6 +22,8 @@ module Simmons
       end
 
       def parse_lead(lead)
+        return unless lead.source.name.include?('Facebook')
+        
         message = lead.message
         (parse_message(message)['conditional_question_3'] || '').split('-')
       end
