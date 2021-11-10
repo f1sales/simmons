@@ -17,13 +17,13 @@ module Simmons
       end
 
       def switch_salesman(lead)
+        return unless lead.source.name.include?('Facebook')
+        
         _, store_name = parse_lead(lead)
         { email: "#{emailize(store_name)}@simmons.com.br" }
       end
 
       def parse_lead(lead)
-        return unless lead.source.name.include?('Facebook')
-        
         message = lead.message
         (parse_message(message)['conditional_question_3'] || '').split('-')
       end
