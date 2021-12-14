@@ -1,7 +1,6 @@
 require File.expand_path '../spec_helper.rb', __FILE__
 require 'ostruct'
 require 'byebug'
-require 'f1sales_custom/hooks'
 
 RSpec.describe F1SalesCustom::Hooks::Lead do
   context 'when came from facebook' do
