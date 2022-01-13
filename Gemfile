@@ -9,10 +9,11 @@ gem 'f1sales_custom-hooks', github: 'marciok/f1sales_custom-hooks', branch: 'mas
 gemspec
 
 gem "rake", "~> 13.0"
-
-gem "rspec", "~> 3.0"
+gem 'http'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "rspec", "~> 3.0"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'webmock'
 end
