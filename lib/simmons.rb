@@ -13,8 +13,11 @@ module Simmons
 
         if source_name.include?('Facebook')
           store_group = parse_facebook_lead(lead).first
-        elsif source_name.include?('Widgrid')
+          return send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
+        elsif source_name.downcase.include?('widgrid')
           store_group = parse_widgrid_lead(lead).first
+          source_name = source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
+          return send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
         else
           return source_name
         end
@@ -26,7 +29,7 @@ module Simmons
 
         if source_name.include?('Facebook')
           store_name = parse_facebook_lead(lead).last
-        elsif source_name.include?('Widgrid')
+        elsif source_name.downcase.include?('widgrid')
           store_name = parse_widgrid_lead(lead).last
         else
           return
@@ -35,13 +38,15 @@ module Simmons
         { email: "#{emailize(store_name)}@simmons.com.br" }
       end
 
+      private
+
       def parse_facebook_lead(lead)
         message = lead.message
         (parse_message(message)['conditional_question_3'] || '').split('-')
       end
 
       def parse_widgrid_lead(lead)
-        lead.message.split('-')
+        lead.message.split(' - ').last.split('-')
       end
 
       def emailize(string)
@@ -50,6 +55,49 @@ module Simmons
 
       def parse_message(message)
         Hash[message.split('; ').map { |s| s.split(': ') }]
+      end
+
+      def send_to_dreamcomfort(lead)
+        customer = lead.customer
+        source_name = lead.source.name
+        source_name = if source_name.downcase.include?('widgrid')
+                        source_name.split(' - ').map(&:capitalize)[0..1].reverse.join(' - ')
+                      else
+                        source_name.split(' - ').reverse.join(' - ')
+                      end
+
+
+        HTTP.post(
+          'https://simmonsdreamcomfort.f1sales.org/public/api/v1/leads',
+          json: {
+            lead: {
+              message: parse_message_to_dreamcomfort(lead.message),
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: lead.product.name
+              },
+              source: {
+                name: source_name
+              }
+            }
+          }
+        )
+
+        nil
+      end
+
+      def parse_message_to_dreamcomfort(message)
+        if message.include?('avenida corifeu de azevedo marques 549')
+          'av._corifeu_de_azevedo_marques,_549_-_butantã'
+        elsif message.include?('avenida ibirapuera 3000')
+          'av._ibirapuera,_3000_-_moema'
+        elsif message.include?('avenida ibirapuera 2453')
+          'av._ibirapuera,_2453_-_moema'
+        end
       end
     end
   end
