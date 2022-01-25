@@ -13,11 +13,11 @@ module Simmons
 
         if source_name.include?('Facebook')
           store_group = parse_facebook_lead(lead).first
-          return send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
+          send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
         elsif source_name.downcase.include?('widgrid')
           store_group = parse_widgrid_lead(lead).first
           source_name = source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
-          return send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
+          send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
         else
           return source_name
         end
@@ -86,8 +86,6 @@ module Simmons
             }
           }
         )
-
-        nil
       end
 
       def parse_message_to_dreamcomfort(message)

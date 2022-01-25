@@ -118,8 +118,8 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         }
       end
 
-      it 'returns nil' do
-        expect(described_class.switch_source(lead)).to be_nil
+      it 'returns source name' do
+        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - dreamcomfort')
       end
 
       it 'post to simmons dream comfort' do
@@ -151,8 +151,8 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         }
       end
 
-      it 'returns nil' do
-        expect(described_class.switch_source(lead)).to be_nil
+      it 'returns source name' do
+        expect(described_class.switch_source(lead)).to eq('Widgrid - Simmons - dreamcomfort')
       end
 
       it 'post to simmons dream comfort' do
