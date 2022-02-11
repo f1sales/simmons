@@ -9,15 +9,16 @@ module Simmons
   class F1SalesCustom::Hooks::Lead
     class << self
       def switch_source(lead)
-        source_name = lead.source.name
+        @lead = lead
+        source_name = @lead.source.name
 
         if source_name.include?('Facebook')
-          store_group = parse_facebook_lead(lead).first
-          send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
+          store_group = parse_facebook_lead.first
+          handle_integrated_stores(store_group)
         elsif source_name.downcase.include?('widgrid')
-          store_group = parse_widgrid_lead(lead).first
+          store_group = parse_widgrid_lead(@lead.message).first
           source_name = source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
-          send_to_dreamcomfort(lead) if store_group == 'dreamcomfort'
+          handle_integrated_stores(store_group)
         else
           return source_name
         end
@@ -25,12 +26,13 @@ module Simmons
       end
 
       def switch_salesman(lead)
-        source_name = lead.source.name
+        @lead = lead
+        source_name = @lead.source.name
 
         if source_name.include?('Facebook')
-          store_name = parse_facebook_lead(lead).last
+          store_name = parse_facebook_lead.last
         elsif source_name.downcase.include?('widgrid')
-          store_name = parse_widgrid_lead(lead).last
+          store_name = parse_widgrid_lead(@lead.message).last
         else
           return
         end
@@ -40,13 +42,12 @@ module Simmons
 
       private
 
-      def parse_facebook_lead(lead)
-        message = lead.message
-        (parse_message(message)['conditional_question_3'] || '').split('-')
+      def parse_facebook_lead
+        (parse_message(@lead.message)['conditional_question_3'] || '').split('-')
       end
 
-      def parse_widgrid_lead(lead)
-        lead.message.split(' - ').last.split('-')
+      def parse_widgrid_lead(message)
+        message.split(' - ').last.split('-')
       end
 
       def emailize(string)
@@ -57,35 +58,49 @@ module Simmons
         Hash[message.split('; ').map { |s| s.split(': ') }]
       end
 
-      def send_to_dreamcomfort(lead)
-        customer = lead.customer
-        source_name = lead.source.name
-        source_name = if source_name.downcase.include?('widgrid')
-                        source_name.split(' - ').map(&:capitalize)[0..1].reverse.join(' - ')
-                      else
-                        source_name.split(' - ').reverse.join(' - ')
-                      end
+      def handle_integrated_stores(store_group)
+        integrated_stores = %w[dreamcomfort confortale]
+        send("send_to_#{store_group}") if integrated_stores.include?(store_group)
+      end
 
+      def send_to_dreamcomfort
+        post_to_integrated_store('simmonsdreamcomfort', parse_message_to_dreamcomfort(@lead.message))
+      end
+
+      def send_to_confortale
+        post_to_integrated_store('confortalecolchoes', @lead.message)
+      end
+
+      def post_to_integrated_store(store_group, message)
+        customer = @lead.customer
 
         HTTP.post(
-          'https://simmonsdreamcomfort.f1sales.org/public/api/v1/leads',
+          "https://#{store_group}.f1sales.org/public/api/v1/leads",
           json: {
             lead: {
-              message: parse_message_to_dreamcomfort(lead.message),
+              message: message,
               customer: {
                 name: customer.name,
                 email: customer.email,
                 phone: customer.phone
               },
               product: {
-                name: lead.product.name
+                name: @lead.product.name
               },
               source: {
-                name: source_name
+                name: parse_source(@lead.source.name)
               }
             }
           }
         )
+      end
+
+      def parse_source(source_name)
+        if source_name.downcase.include?('widgrid')
+          source_name.split(' - ').map(&:capitalize)[0..1].reverse.join(' - ')
+        else
+          source_name.split(' - ').reverse.join(' - ')
+        end
       end
 
       def parse_message_to_dreamcomfort(message)
