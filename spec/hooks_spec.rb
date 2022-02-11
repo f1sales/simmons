@@ -162,4 +162,111 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
     end
   end
+
+  context 'when is to confortalecolchoes' do
+    let(:source) do
+      source = OpenStruct.new
+      source.name = source_name
+      source
+    end
+
+    let(:customer) do
+      customer = OpenStruct.new
+      customer.name = 'Marcio'
+      customer.phone = '1198788899'
+      customer.email = 'marcio@f1sales.com.br'
+
+      customer
+    end
+
+    let(:product) do
+      product = OpenStruct.new
+      product.name = 'Exclusivas I Titanium/22 I 31/03/2022'
+
+      product
+    end
+
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.message = message
+      lead.source = source
+      lead.product = product
+      lead.customer = customer
+
+      lead
+    end
+
+    let(:call_url) { 'https://confortalecolchoes.f1sales.org/public/api/v1/leads' }
+
+    before do
+      stub_request(:post, call_url)
+        .with(body: lead_payload.to_json).to_return(status: 200, body: '', headers: {})
+    end
+
+    context 'when source is from facebook' do
+      let(:source_name) { 'Facebook - Simmons' }
+      let(:message) { 'conditional_question_2: São Paulo; conditional_question_3: confortale-avenida cruzeiro do sul 1100; conditional_question_1: São Paulo' }
+      let(:lead_payload) do
+        {
+          lead: {
+            message: message,
+            customer: {
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone
+            },
+            product: {
+              name: product.name
+            },
+            source: {
+              name: 'Simmons - Facebook'
+            }
+          }
+        }
+      end
+
+      it 'returns source name' do
+        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - confortale')
+      end
+
+      it 'post to confortale colchoes' do
+        described_class.switch_source(lead) rescue nil
+
+        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+    end
+
+    context 'when source is from widgrid' do
+      let(:source_name) { 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO' }
+      let(:message) { 'Simmons - ESC - confortale-avenida cruzeiro do sul 1100' }
+      let(:lead_payload) do
+        {
+          lead: {
+            message: message,
+            customer: {
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone
+            },
+            product: {
+              name: product.name
+            },
+            source: {
+              name: 'Simmons - Widgrid'
+            }
+          }
+        }
+      end
+
+      it 'returns source name' do
+        expect(described_class.switch_source(lead)).to eq('Widgrid - Simmons - confortale')
+      end
+
+      it 'post to confortale colchoes' do
+        described_class.switch_source(lead) rescue nil
+
+        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+    end
+  end
 end
