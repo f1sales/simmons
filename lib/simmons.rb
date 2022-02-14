@@ -60,22 +60,22 @@ module Simmons
 
       def handle_integrated_stores(store_group)
         integrated_stores = %w[dreamcomfort confortale]
-        send("send_to_#{store_group}") if integrated_stores.include?(store_group)
+        send("forward_to_#{store_group}") if integrated_stores.include?(store_group)
       end
 
-      def send_to_dreamcomfort
-        post_to_integrated_store('simmonsdreamcomfort', parse_message_to_dreamcomfort(@lead.message))
+      def forward_to_dreamcomfort
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(@lead.message))
       end
 
-      def send_to_confortale
-        post_to_integrated_store('confortalecolchoes', @lead.message)
+      def forward_to_confortale
+        create_lead_on('confortalecolchoes', @lead.message)
       end
 
-      def post_to_integrated_store(store_group, message)
+      def create_lead_on(store, message)
         customer = @lead.customer
 
         HTTP.post(
-          "https://#{store_group}.f1sales.org/public/api/v1/leads",
+          "https://#{store}.f1sales.org/public/api/v1/leads",
           json: {
             lead: {
               message: message,
@@ -96,11 +96,12 @@ module Simmons
       end
 
       def parse_source(source_name)
+        splitted_name = source_name.split(' - ')
         if source_name.downcase.include?('widgrid')
-          source_name.split(' - ').map(&:capitalize)[0..1].reverse.join(' - ')
+          splitted_name.map(&:capitalize)[0..1]
         else
-          source_name.split(' - ').reverse.join(' - ')
-        end
+          splitted_name
+        end.reverse.join(' - ')
       end
 
       def parse_message_to_dreamcomfort(message)
