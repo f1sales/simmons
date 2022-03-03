@@ -74,7 +74,7 @@ module Simmons
       def create_lead_on(store, message)
         customer = @lead.customer
 
-        HTTP.post(
+        response = HTTP.post(
           "https://#{store}.f1sales.org/public/api/v1/leads",
           json: {
             lead: {
@@ -97,6 +97,10 @@ module Simmons
             }
           }
         )
+
+        lead_created = JSON.parse(response.body)
+
+        @lead.update!(transferred_path: { 'to' => store, 'id' => lead_created['data']['id'] })
       end
 
       def parse_source(source_name)

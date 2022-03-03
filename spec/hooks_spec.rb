@@ -4,6 +4,13 @@ require 'byebug'
 
 RSpec.describe F1SalesCustom::Hooks::Lead do
   let(:lead_id) { 'abc123' }
+  let(:lead_created_payload) do
+    {
+      'data' => {
+        'id' => 'newleadabc123'
+      }
+    }
+  end
 
   context 'when came from facebook' do
     let(:lead) do
@@ -96,13 +103,15 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:call_url) { 'https://simmonsdreamcomfort.f1sales.org/public/api/v1/leads' }
 
     before do
+      allow(lead).to receive(:update!).and_return(nil)
       stub_request(:post, call_url)
-        .with(body: lead_payload.to_json).to_return(status: 200, body: '', headers: {})
+        .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
     end
 
     context 'when source is from facebook' do
       let(:source_name) { 'Facebook - Simmons' }
       let(:message) { 'conditional_question_1: São Paulo; conditional_question_2: Butantã; conditional_question_3: dreamcomfort-avenida corifeu de azevedo marques 549' }
+
       let(:lead_payload) do
         {
           lead: {
@@ -134,6 +143,13 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         described_class.switch_source(lead) rescue nil
 
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+
+      it 'update lead with transferred_path' do
+        expect(lead).to receive(:update!).with(
+          transferred_path: { 'to' => 'simmonsdreamcomfort', 'id' => lead_created_payload['data']['id'] }
+        )
+        described_class.switch_source(lead)
       end
     end
 
@@ -212,8 +228,9 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:call_url) { 'https://confortalecolchoes.f1sales.org/public/api/v1/leads' }
 
     before do
+      allow(lead).to receive(:update!).and_return(nil)
       stub_request(:post, call_url)
-        .with(body: lead_payload.to_json).to_return(status: 200, body: '', headers: {})
+        .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
     end
 
     context 'when source is from facebook' do
