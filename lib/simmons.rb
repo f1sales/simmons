@@ -87,6 +87,10 @@ module Simmons
               product: {
                 name: @lead.product.name
               },
+              transferred_path: {
+                from: 'simmons',
+                id: @lead.id
+              },
               source: {
                 name: parse_source(@lead.source.name)
               }

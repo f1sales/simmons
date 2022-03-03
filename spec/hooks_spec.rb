@@ -2,13 +2,15 @@ require File.expand_path '../spec_helper.rb', __FILE__
 require 'ostruct'
 require 'byebug'
 
-
 RSpec.describe F1SalesCustom::Hooks::Lead do
+  let(:lead_id) { 'abc123' }
+
   context 'when came from facebook' do
     let(:lead) do
       lead = OpenStruct.new
       lead.source = source
       lead.message = 'conditional_question_1: Belo Horizonte; conditional_question_2: Belvedere; conditional_question_3: arte do sono-avenida luiz paulo franco 981'
+      lead.id = lead_id
 
       lead
     end
@@ -35,6 +37,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       lead = OpenStruct.new
       lead.source = source
       lead.message = 'Simmons - ESC - grupo alfa-avenida nossa senhora de fatima 258'
+      lead.id = lead_id
 
       lead
     end
@@ -85,6 +88,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       lead.source = source
       lead.product = product
       lead.customer = customer
+      lead.id = lead_id
 
       lead
     end
@@ -110,6 +114,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
             },
             product: {
               name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
             },
             source: {
               name: 'Simmons - Facebook'
@@ -143,6 +151,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
             },
             product: {
               name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
             },
             source: {
               name: 'Simmons - Widgrid'
@@ -192,6 +204,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       lead.source = source
       lead.product = product
       lead.customer = customer
+      lead.id = lead_id
 
       lead
     end
@@ -217,6 +230,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
             },
             product: {
               name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
             },
             source: {
               name: 'Simmons - Facebook'
@@ -250,6 +267,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
             },
             product: {
               name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
             },
             source: {
               name: 'Simmons - Widgrid'
