@@ -100,8 +100,9 @@ module Simmons
         )
 
         lead_created = JSON.parse(response.body)
+        puts lead_created
 
-        @lead.update!(transferred_path: { 'to' => store, 'id' => lead_created['data']['id'] })
+        # @lead.update!(transferred_path: { 'to' => store, 'id' => lead_created['data']['id'] })
       end
 
       def parse_source(source_name)
