@@ -3,6 +3,7 @@
 require_relative "simmons/version"
 require 'f1sales_custom/hooks'
 require "f1sales_helpers"
+require 'json'
 
 module Simmons
   class Error < StandardError; end
@@ -89,7 +90,7 @@ module Simmons
               },
               transferred_path: {
                 from: 'simmons',
-                id: @lead.id
+                id: @lead.id.to_s
               },
               source: {
                 name: parse_source(@lead.source.name)
