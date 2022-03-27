@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "simmons/version"
+require_relative 'simmons/version'
 require 'f1sales_custom/hooks'
-require "f1sales_helpers"
+require 'f1sales_helpers'
 require 'json'
 
 module Simmons
   class Error < StandardError; end
+
   class F1SalesCustom::Hooks::Lead
     class << self
       def switch_source(lead)
@@ -52,7 +53,8 @@ module Simmons
       end
 
       def emailize(string)
-        string.dup.force_encoding('UTF-8').unicode_normalize(:nfkd).encode('ASCII', replace: '').downcase.gsub(/\W+/, '')
+        string.dup.force_encoding('UTF-8').unicode_normalize(:nfkd).encode('ASCII', replace: '').downcase.gsub(/\W+/,
+                                                                                                               '')
       end
 
       def parse_message(message)
@@ -60,7 +62,7 @@ module Simmons
       end
 
       def handle_integrated_stores(store_group)
-        integrated_stores = %w[dreamcomfort confortale]
+        integrated_stores = %w[dreamcomfort confortale mega]
         send("forward_to_#{store_group}") if integrated_stores.include?(store_group)
       end
 
@@ -72,9 +74,12 @@ module Simmons
         create_lead_on('confortalecolchoes', @lead.message)
       end
 
+      def forward_to_mega
+        create_lead_on('megacolchoes', @lead.message)
+      end
+
       def create_lead_on(store, message)
         customer = @lead.customer
-
         response = HTTP.post(
           "https://#{store}.f1sales.org/public/api/v1/leads",
           json: {
@@ -99,10 +104,7 @@ module Simmons
           }
         )
 
-        lead_created = JSON.parse(response.body)
-        puts lead_created
-
-        # @lead.update!(transferred_path: { 'to' => store, 'id' => lead_created['data']['id'] })
+        JSON.parse(response.body)
       end
 
       def parse_source(source_name)

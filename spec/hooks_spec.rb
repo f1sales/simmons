@@ -1,4 +1,4 @@
-require File.expand_path '../spec_helper.rb', __FILE__
+require File.expand_path 'spec_helper.rb', __dir__
 require 'ostruct'
 require 'byebug'
 
@@ -66,6 +66,92 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
+  context 'when is to megacolchoes' do
+    let(:source) do
+      source = OpenStruct.new
+      source.name = source_name
+      source
+    end
+
+    let(:customer) do
+      customer = OpenStruct.new
+      customer.name = 'Marcio'
+      customer.phone = '1198788899'
+      customer.email = 'marcio@f1sales.com.br'
+
+      customer
+    end
+
+    let(:product) do
+      product = OpenStruct.new
+      product.name = 'São Paulo - BF - novo formulario'
+
+      product
+    end
+
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.message = message
+      lead.source = source
+      lead.product = product
+      lead.customer = customer
+      lead.id = lead_id
+
+      lead
+    end
+
+    let(:call_url) { 'https://megacolchoes.f1sales.org/public/api/v1/leads' }
+
+    before do
+      stub_request(:post, call_url)
+        .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
+    end
+
+    context 'when source is from facebook' do
+      let(:source_name) { 'Facebook - Simmons' }
+      let(:message) do
+        'conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: mega-alameda nhambiquaras 801'
+      end
+
+      let(:lead_payload) do
+        {
+          lead: {
+            message: message,
+            customer: {
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone
+            },
+            product: {
+              name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
+            },
+            source: {
+              name: 'Simmons - Facebook'
+            }
+          }
+        }
+      end
+
+      it 'returns source name' do
+        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - mega')
+      end
+
+      it 'post to mega colchoes' do
+        begin
+          described_class.switch_source(lead)
+        rescue StandardError
+          nil
+        end
+
+        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+    end
+  end
+
   context 'when is to simmons dream comfort' do
     let(:source) do
       source = OpenStruct.new
@@ -103,14 +189,15 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:call_url) { 'https://simmonsdreamcomfort.f1sales.org/public/api/v1/leads' }
 
     before do
-      allow(lead).to receive(:update!).and_return(nil)
       stub_request(:post, call_url)
         .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
     end
 
     context 'when source is from facebook' do
       let(:source_name) { 'Facebook - Simmons' }
-      let(:message) { 'conditional_question_1: São Paulo; conditional_question_2: Butantã; conditional_question_3: dreamcomfort-avenida corifeu de azevedo marques 549' }
+      let(:message) do
+        'conditional_question_1: São Paulo; conditional_question_2: Butantã; conditional_question_3: dreamcomfort-avenida corifeu de azevedo marques 549'
+      end
 
       let(:lead_payload) do
         {
@@ -140,16 +227,13 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'post to simmons dream comfort' do
-        described_class.switch_source(lead) rescue nil
+        begin
+          described_class.switch_source(lead)
+        rescue StandardError
+          nil
+        end
 
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
-      end
-
-      it 'update lead with transferred_path' do
-        expect(lead).to receive(:update!).with(
-          transferred_path: { 'to' => 'simmonsdreamcomfort', 'id' => lead_created_payload['data']['id'] }
-        )
-        described_class.switch_source(lead)
       end
     end
 
@@ -184,7 +268,11 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'post to simmons dream comfort' do
-        described_class.switch_source(lead) rescue nil
+        begin
+          described_class.switch_source(lead)
+        rescue StandardError
+          nil
+        end
 
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
       end
@@ -228,14 +316,15 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:call_url) { 'https://confortalecolchoes.f1sales.org/public/api/v1/leads' }
 
     before do
-      allow(lead).to receive(:update!).and_return(nil)
       stub_request(:post, call_url)
         .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
     end
 
     context 'when source is from facebook' do
       let(:source_name) { 'Facebook - Simmons' }
-      let(:message) { 'conditional_question_2: São Paulo; conditional_question_3: confortale-avenida cruzeiro do sul 1100; conditional_question_1: São Paulo' }
+      let(:message) do
+        'conditional_question_2: São Paulo; conditional_question_3: confortale-avenida cruzeiro do sul 1100; conditional_question_1: São Paulo'
+      end
       let(:lead_payload) do
         {
           lead: {
@@ -264,7 +353,11 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'post to confortale colchoes' do
-        described_class.switch_source(lead) rescue nil
+        begin
+          described_class.switch_source(lead)
+        rescue StandardError
+          nil
+        end
 
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
       end
@@ -301,7 +394,11 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'post to confortale colchoes' do
-        described_class.switch_source(lead) rescue nil
+        begin
+          described_class.switch_source(lead)
+        rescue StandardError
+          nil
+        end
 
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
       end
