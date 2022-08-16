@@ -409,7 +409,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
-  context 'when moema is unified' do
+  context 'when moema was unified' do
     let(:lead) do
       lead = OpenStruct.new
       lead.source = source
