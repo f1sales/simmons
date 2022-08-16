@@ -39,6 +39,8 @@ module Simmons
           return
         end
 
+        store_name = 'avenida ibirapuera 2453' if store_name['avenida ibirapuera']
+
         { email: "#{emailize(store_name)}@simmons.com.br" }
       end
 

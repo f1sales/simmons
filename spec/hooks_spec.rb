@@ -12,6 +12,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     }
   end
 
+  let(:switch_source) { described_class.switch_source(lead) }
+
+  let(:switch_salesman) { described_class.switch_salesman(lead) }
+
   context 'when came from facebook' do
     let(:lead) do
       lead = OpenStruct.new
@@ -30,11 +34,11 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     context 'when has store group' do
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - arte do sono')
+        expect(switch_source).to eq('Facebook - Simmons - arte do sono')
       end
 
       it 'returns salesman email' do
-        expect(described_class.switch_salesman(lead)).to eq({ email: 'avenidaluizpaulofranco981@simmons.com.br' })
+        expect(switch_salesman).to eq({ email: 'avenidaluizpaulofranco981@simmons.com.br' })
       end
     end
   end
@@ -57,11 +61,11 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     context 'when has store group' do
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Widgrid - Simmons - grupo alfa')
+        expect(switch_source).to eq('Widgrid - Simmons - grupo alfa')
       end
 
       it 'returns salesman email' do
-        expect(described_class.switch_salesman(lead)).to eq({ email: 'avenidanossasenhoradefatima258@simmons.com.br' })
+        expect(switch_salesman).to eq({ email: 'avenidanossasenhoradefatima258@simmons.com.br' })
       end
     end
   end
@@ -137,12 +141,12 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - mega')
+        expect(switch_source).to eq('Facebook - Simmons - mega')
       end
 
       it 'post to mega colchoes' do
         begin
-          described_class.switch_source(lead)
+          switch_source
         rescue StandardError
           nil
         end
@@ -223,12 +227,12 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - dreamcomfort')
+        expect(switch_source).to eq('Facebook - Simmons - dreamcomfort')
       end
 
       it 'post to simmons dream comfort' do
         begin
-          described_class.switch_source(lead)
+          switch_source
         rescue StandardError
           nil
         end
@@ -264,12 +268,12 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Widgrid - Simmons - dreamcomfort')
+        expect(switch_source).to eq('Widgrid - Simmons - dreamcomfort')
       end
 
       it 'post to simmons dream comfort' do
         begin
-          described_class.switch_source(lead)
+          switch_source
         rescue StandardError
           nil
         end
@@ -349,12 +353,12 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Facebook - Simmons - confortale')
+        expect(switch_source).to eq('Facebook - Simmons - confortale')
       end
 
       it 'post to confortale colchoes' do
         begin
-          described_class.switch_source(lead)
+          switch_source
         rescue StandardError
           nil
         end
@@ -390,17 +394,47 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(described_class.switch_source(lead)).to eq('Widgrid - Simmons - confortale')
+        expect(switch_source).to eq('Widgrid - Simmons - confortale')
       end
 
       it 'post to confortale colchoes' do
         begin
-          described_class.switch_source(lead)
+          switch_source
         rescue StandardError
           nil
         end
 
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+    end
+  end
+
+  context 'when moema was unified' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = 'conditional_question_2: São Paulo; conditional_question_3: dreamcomfort-avenida ibirapuera 2453; conditional_question_1: São Paulo'
+      lead.id = lead_id
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'Facebook - Simmons'
+      source
+    end
+
+    context 'when the address is Av. Ibirapuera, 2453' do
+      it 'returns salesman email' do
+        expect(switch_salesman).to eq({ email: 'avenidaibirapuera2453@simmons.com.br' })
+      end
+    end
+
+    context 'when the address is Av. Ibirapuera, 3000' do
+      before { lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: dreamcomfort-avenida ibirapuera 3000' }
+      it 'returns salesman email' do
+        expect(switch_salesman).to eq({ email: 'avenidaibirapuera2453@simmons.com.br' })
       end
     end
   end
