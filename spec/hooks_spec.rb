@@ -491,47 +491,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
       end
     end
-
-    # context 'when source is from widgrid' do
-    #   let(:source_name) { 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO' }
-    #   let(:message) { 'Simmons - ESC - dreamcomfort-avenida ibirapuera 3000' }
-    #   let(:lead_payload) do
-    #     {
-    #       lead: {
-    #         message: 'av._ibirapuera,_3000_-_moema',
-    #         customer: {
-    #           name: customer.name,
-    #           email: customer.email,
-    #           phone: customer.phone
-    #         },
-    #         product: {
-    #           name: product.name
-    #         },
-    #         transferred_path: {
-    #           from: 'simmons',
-    #           id: lead_id
-    #         },
-    #         source: {
-    #           name: 'Simmons - Widgrid'
-    #         }
-    #       }
-    #     }
-    #   end
-
-    #   it 'returns source name' do
-    #     expect(switch_source).to eq('Widgrid - Simmons - dreamcomfort')
-    #   end
-
-    #   it 'post to simmons dream comfort' do
-    #     begin
-    #       switch_source
-    #     rescue StandardError
-    #       nil
-    #     end
-
-    #     expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
-    #   end
-    # end
   end
 
   context 'when Moema was unified' do
