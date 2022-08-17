@@ -281,6 +281,48 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
       end
     end
+
+    context 'when source is from widgrid to Braz Leme' do
+      let(:source_name) { 'Widgrid - Simmons' }
+      let(:message) { 'Simmons - ESC - dreamconfort-casa verde' }
+
+      let(:lead_payload) do
+        {
+          lead: {
+            message: 'av._braz_leme,_757_-_santana',
+            customer: {
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone
+            },
+            product: {
+              name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
+            },
+            source: {
+              name: 'Simmons - Widgrid'
+            }
+          }
+        }
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Widgrid - Simmons - dreamconfort')
+      end
+
+      it 'post to simmons dream comfort' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+    end
   end
 
   context 'when is to confortalecolchoes' do
@@ -448,48 +490,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     before do
       stub_request(:post, call_url)
         .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
-    end
-
-    context 'when source is from widgrid' do
-      let(:source_name) { 'Widgrid - Simmons' }
-      let(:message) { 'Simmons - ESC - dreamconfort-casa verde' }
-
-      let(:lead_payload) do
-        {
-          lead: {
-            message: 'av._braz_leme,_757_-_santana',
-            customer: {
-              name: customer.name,
-              email: customer.email,
-              phone: customer.phone
-            },
-            product: {
-              name: product.name
-            },
-            transferred_path: {
-              from: 'simmons',
-              id: lead_id
-            },
-            source: {
-              name: 'Simmons - Widgrid'
-            }
-          }
-        }
-      end
-
-      it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - dreamconfort')
-      end
-
-      it 'post to simmons dream comfort' do
-        begin
-          switch_source
-        rescue StandardError
-          nil
-        end
-
-        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
-      end
     end
   end
 
