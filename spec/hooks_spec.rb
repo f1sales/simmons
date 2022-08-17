@@ -451,48 +451,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
-  context 'when is to simmons dream comfort' do
-    let(:source) do
-      source = OpenStruct.new
-      source.name = source_name
-      source
-    end
-
-    let(:customer) do
-      customer = OpenStruct.new
-      customer.name = 'Marcio'
-      customer.phone = '1198788899'
-      customer.email = 'marcio@f1sales.com.br'
-
-      customer
-    end
-
-    let(:product) do
-      product = OpenStruct.new
-      product.name = 'Simmons Marbella 2022'
-
-      product
-    end
-
-    let(:lead) do
-      lead = OpenStruct.new
-      lead.message = message
-      lead.source = source
-      lead.product = product
-      lead.customer = customer
-      lead.id = lead_id
-
-      lead
-    end
-
-    let(:call_url) { 'https://simmonsdreamcomfort.f1sales.org/public/api/v1/leads' }
-
-    before do
-      stub_request(:post, call_url)
-        .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
-    end
-  end
-
   context 'when Moema was unified' do
     let(:lead) do
       lead = OpenStruct.new
