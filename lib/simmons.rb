@@ -64,7 +64,7 @@ module Simmons
       end
 
       def handle_integrated_stores(store_group)
-        integrated_stores = %w[dreamcomfort confortale mega]
+        integrated_stores = %w[dreamcomfort dreamconfort confortale mega]
         send("forward_to_#{store_group}") if integrated_stores.include?(store_group)
       end
 
@@ -78,6 +78,10 @@ module Simmons
 
       def forward_to_mega
         create_lead_on('megacolchoes', @lead.message)
+      end
+
+      def forward_to_dreamconfort
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(@lead.message))
       end
 
       def create_lead_on(store, message)
@@ -125,6 +129,8 @@ module Simmons
           'av._ibirapuera,_3000_-_moema'
         elsif message.include?('avenida ibirapuera 2453')
           'av._ibirapuera,_2453_-_moema'
+        elsif message.include?('dreamconfort-casa verde')
+          'av._braz_leme,_757_-_santana'
         end
       end
     end
