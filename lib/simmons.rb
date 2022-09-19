@@ -12,38 +12,22 @@ module Simmons
     class << self
       def switch_source(lead)
         @lead = lead
-        source_name = @lead.source.name
+        @source_name = @lead.source.name
 
-        if source_name.include?('Facebook')
-          store_group = parse_facebook_lead.first
-          handle_integrated_stores(store_group)
-        elsif source_name.downcase.include?('widgrid')
-          store_group = parse_widgrid_lead(@lead.message).first
-          source_name = source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
-          handle_integrated_stores(store_group)
-        else
-          return source_name
-        end
+        return @source_name unless @source_name['Facebook'] || @source_name.downcase['widgrid']
 
-        if @lead.message.downcase == 'sem loja'
-          "#{source_name} - #{@lead.description}"
-        else
-          "#{source_name} - #{store_group}"
-        end
+        source_name_and_store_group_for_switch_source
+
+        "#{@source_name} - #{@store_group}"
       end
 
       def switch_salesman(lead)
         @lead = lead
-        source_name = @lead.source.name
+        @source_name = @lead.source.name
 
-        if source_name.include?('Facebook')
-          store_name = parse_facebook_lead.last
-        elsif source_name.downcase.include?('widgrid')
-          store_name = parse_widgrid_lead(@lead.message).last
-        else
-          return
-        end
+        return unless @source_name['Facebook'] || @source_name.downcase['widgrid']
 
+        store_name = store_name_for_switch_salesman
         store_name = 'avenida ibirapuera 2453' if store_name['avenida ibirapuera']
 
         { email: "#{emailize(store_name)}@simmons.com.br" }
@@ -51,8 +35,40 @@ module Simmons
 
       private
 
+      def source_name_and_store_group_for_switch_source
+        if @source_name['Facebook']
+          store_group_for_facebook
+        elsif @source_name.downcase['widgrid']
+          store_group_and_source_name_for_widgrid
+        end
+      end
+
+      def lead_message
+        @lead.message
+      end
+
+      def store_group_for_facebook
+        @store_group = parse_facebook_lead.first
+        handle_integrated_stores(@store_group)
+      end
+
+      def store_group_and_source_name_for_widgrid
+        @store_group = parse_widgrid_lead(lead_message).first
+        @source_name = @source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
+        handle_integrated_stores(@store_group)
+        @store_group = @lead.description if lead_message.downcase == 'sem loja'
+      end
+
+      def store_name_for_switch_salesman
+        if @source_name['Facebook']
+          parse_facebook_lead.last
+        elsif @source_name.downcase['widgrid']
+          parse_widgrid_lead(lead_message).last
+        end
+      end
+
       def parse_facebook_lead
-        (parse_message(@lead.message)['conditional_question_3'] || '').split('-')
+        (parse_message(lead_message)['conditional_question_3'] || '').split('-')
       end
 
       def parse_widgrid_lead(message)
@@ -74,48 +90,71 @@ module Simmons
       end
 
       def forward_to_dreamcomfort
-        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(@lead.message))
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
       end
 
       def forward_to_confortale
-        create_lead_on('confortalecolchoes', @lead.message)
+        create_lead_on('confortalecolchoes', lead_message)
       end
 
       def forward_to_mega
-        create_lead_on('megacolchoes', @lead.message)
+        create_lead_on('megacolchoes', lead_message)
       end
 
       def forward_to_dreamconfort
-        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(@lead.message))
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
       end
 
       def create_lead_on(store, message)
-        customer = @lead.customer
         response = HTTP.post(
           "https://#{store}.f1sales.org/public/api/v1/leads",
-          json: {
-            lead: {
-              message: message,
-              customer: {
-                name: customer.name,
-                email: customer.email,
-                phone: customer.phone
-              },
-              product: {
-                name: @lead.product.name
-              },
-              transferred_path: {
-                from: 'simmons',
-                id: @lead.id.to_s
-              },
-              source: {
-                name: parse_source(@lead.source.name)
-              }
-            }
-          }
+          json: lead_payload(message)
         )
 
         JSON.parse(response.body)
+      end
+
+      def customer
+        @lead.customer
+      end
+
+      def lead_payload(message)
+        {
+          lead: {
+            message: message,
+            customer: customer_data,
+            product: product_name,
+            transferred_path: transferred_path,
+            source: source_name
+          }
+        }
+      end
+
+      def customer_data
+        {
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone
+        }
+      end
+
+      def product_name
+        {
+          name: @lead.product.name
+        }
+      end
+
+      def source_name
+        {
+          name: parse_source(@lead.source.name)
+        }
+      end
+
+      def transferred_path
+        {
+          from: 'simmons',
+          id: @lead.id.to_s
+        }
       end
 
       def parse_source(source_name)
