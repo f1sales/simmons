@@ -456,7 +456,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       lead = OpenStruct.new
       lead.source = source
       lead.message = 'conditional_question_2: São Paulo; conditional_question_3: dreamcomfort-avenida ibirapuera 2453; conditional_question_1: São Paulo'
-      lead.id = lead_id
 
       lead
     end
@@ -464,6 +463,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:source) do
       source = OpenStruct.new
       source.name = 'Facebook - Simmons'
+
       source
     end
 
@@ -475,9 +475,32 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     context 'when the address is Av. Ibirapuera, 3000' do
       before { lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: dreamcomfort-avenida ibirapuera 3000' }
+
       it 'returns salesman email' do
         expect(switch_salesman).to eq({ email: 'avenidaibirapuera2453@simmons.com.br' })
       end
+    end
+  end
+
+  context 'when is from Widgrid' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = 'Sem loja'
+      lead.description = 'Apuí - AM'
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'Widgrid - Simmons'
+
+      source
+    end
+
+    it 'returns source name' do
+      expect(switch_source).to eq('Widgrid - Simmons - Apuí - AM')
     end
   end
 end

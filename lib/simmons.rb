@@ -24,7 +24,12 @@ module Simmons
         else
           return source_name
         end
-        "#{source_name} - #{store_group}"
+
+        if @lead.message.downcase == 'sem loja'
+          "#{source_name} - #{@lead.description}"
+        else
+          "#{source_name} - #{store_group}"
+        end
       end
 
       def switch_salesman(lead)
