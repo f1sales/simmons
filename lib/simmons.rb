@@ -13,8 +13,9 @@ module Simmons
       def switch_source(lead)
         @lead = lead
         @source_name = @lead.source.name
+        source_name_down = @source_name.downcase
 
-        return @source_name unless @source_name['Facebook'] || @source_name.downcase['widgrid']
+        return "#{@source_name} - #{lead_message}" unless @source_name['Facebook'] || source_name_down['widgrid']
 
         source_name_and_store_group_for_switch_source
 
