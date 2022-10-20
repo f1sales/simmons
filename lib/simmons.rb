@@ -29,7 +29,7 @@ module Simmons
         return unless @source_name['Facebook'] || @source_name.downcase['widgrid']
 
         store_name = store_name_for_switch_salesman
-        store_name = 'av ibirapuera 2453' if store_name.downcase['av ibirapuera']
+        store_name = 'avenida ibirapuera 2453' if store_name['avenida ibirapuera']
 
         { email: "#{emailize(store_name)}@simmons.com.br" }
       end
@@ -49,32 +49,31 @@ module Simmons
       end
 
       def store_group_for_facebook
-        @store_group = parse_facebook_lead.last
+        @store_group = parse_facebook_lead.first
         handle_integrated_stores(@store_group)
       end
 
       def store_group_and_source_name_for_widgrid
-        return @store_group = @lead.description if lead_message.downcase == 'sem loja'
-
-        @store_group = parse_widgrid_lead(lead_message).last
+        @store_group = parse_widgrid_lead(lead_message).first
         @source_name = @source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
         handle_integrated_stores(@store_group)
+        @store_group = @lead.description if lead_message.downcase == 'sem loja'
       end
 
       def store_name_for_switch_salesman
         if @source_name['Facebook']
-          parse_facebook_lead[1]
+          parse_facebook_lead.last
         elsif @source_name.downcase['widgrid']
-          parse_widgrid_lead(lead_message)[1]
+          parse_widgrid_lead(lead_message).last
         end
       end
 
       def parse_facebook_lead
-        (parse_message(lead_message)['conditional_question_3'] || '').split(' - ')
+        (parse_message(lead_message)['conditional_question_3'] || '').split('-')
       end
 
       def parse_widgrid_lead(message)
-        message.split(' - ')[2..]
+        message.split(' - ').last.split('-')
       end
 
       def emailize(string)
@@ -87,9 +86,8 @@ module Simmons
       end
 
       def handle_integrated_stores(store_group)
-        store_group_down = store_group.downcase.gsub(' ', '')
         integrated_stores = %w[dreamcomfort dreamconfort confortale mega]
-        send("forward_to_#{store_group_down}") if integrated_stores.include?(store_group_down)
+        send("forward_to_#{store_group}") if integrated_stores.include?(store_group)
       end
 
       def forward_to_dreamcomfort
@@ -109,7 +107,10 @@ module Simmons
       end
 
       def create_lead_on(store, message)
-        response = HTTP.post("https://#{store}.f1sales.org/public/api/v1/leads",json: lead_payload(message))
+        response = HTTP.post(
+          "https://#{store}.f1sales.org/public/api/v1/leads",
+          json: lead_payload(message)
+        )
 
         JSON.parse(response.body)
       end
@@ -167,14 +168,13 @@ module Simmons
       end
 
       def parse_message_to_dreamcomfort(message)
-        message_down = message.downcase
-        if message_down.include?('av corifeu de azevedo marques, 549')
+        if message.include?('avenida corifeu de azevedo marques 549')
           'av._corifeu_de_azevedo_marques,_549_-_butantã'
-        elsif message_down.include?('av ibirapuera, 3000')
+        elsif message.include?('avenida ibirapuera 3000')
           'av._ibirapuera,_3000_-_moema'
-        elsif message_down.include?('av ibirapuera, 2453')
+        elsif message.include?('avenida ibirapuera 2453')
           'av._ibirapuera,_2453_-_moema'
-        elsif message_down.include?('av braz leme, 757')
+        elsif message.include?('dreamconfort-casa verde')
           'av._braz_leme,_757_-_santana'
         end
       end
