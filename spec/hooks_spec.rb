@@ -353,13 +353,28 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       source
     end
 
-    context 'when message contains salesman information' do
+    context 'when lead message contains salesman information' do
       it 'returns source name' do
         expect(switch_source).to eq('Lead de empresas - Studio do Sono')
       end
 
       it 'returns salesman email' do
         expect(switch_salesman).to eq({ email: 'ruageneralseveriano97@simmons.com.br' })
+      end
+    end
+
+    context 'when lead message contains salesman information' do
+      before do
+        lead.message = 'Simmons - ESC - Centro - Av. Dr Getulio Vargas, 364 - Requintar Colchões'
+        lead.description = 'Campo Alegre - SC'
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Lead de empresas - Requintar Colchões')
+      end
+
+      it 'returns salesman email' do
+        expect(switch_salesman).to eq({ email: 'avdrgetuliovargas364@simmons.com.br' })
       end
     end
 
