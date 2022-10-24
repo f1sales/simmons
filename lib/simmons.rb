@@ -13,9 +13,8 @@ module Simmons
       def switch_source(lead)
         @lead = lead
         @source_name = @lead.source.name
-        source_name_down = @source_name.downcase
 
-        return "#{@source_name} - #{lead_message}" unless @source_name['Facebook'] || source_name_down['widgrid']
+        return "#{@source_name} - #{lead_message}" unless @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
 
         source_name_and_store_group_for_switch_source
 
@@ -26,7 +25,7 @@ module Simmons
         @lead = lead
         @source_name = @lead.source.name
 
-        return unless @source_name['Facebook'] || @source_name.downcase['widgrid']
+        return unless @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
 
         store_name = store_name_for_switch_salesman
         store_name = 'av ibirapuera 2453' if store_name.downcase['av ibirapuera']
@@ -36,10 +35,14 @@ module Simmons
 
       private
 
+      def source_name_down
+        @source_name.downcase
+      end
+
       def source_name_and_store_group_for_switch_source
         if @source_name['Facebook']
           store_group_for_facebook
-        elsif @source_name.downcase['widgrid']
+        elsif source_name_down['widgrid'] || source_name_down['lead de']
           store_group_and_source_name_for_widgrid
         end
       end
@@ -64,7 +67,7 @@ module Simmons
       def store_name_for_switch_salesman
         if @source_name['Facebook']
           parse_facebook_lead[1]
-        elsif @source_name.downcase['widgrid']
+        elsif @source_name.downcase['widgrid'] || source_name_down['lead de']
           parse_widgrid_lead(lead_message)[1]
         end
       end
