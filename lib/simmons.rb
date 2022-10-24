@@ -14,11 +14,12 @@ module Simmons
         @lead = lead
         @source_name = @lead.source.name
 
-        return "#{@source_name} - #{lead_message}" unless @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
-
-        source_name_and_store_group_for_switch_source
-
-        "#{@source_name} - #{@store_group}"
+        if @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
+          source_name_and_store_group_for_switch_source
+          "#{@source_name} - #{@store_group}"
+        else
+          "#{@source_name} - #{lead_message}"
+        end
       end
 
       def switch_salesman(lead)
