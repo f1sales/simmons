@@ -335,4 +335,58 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       expect(switch_source).to eq('Google Drive Planilha - Planilha - Simmons - Ribeirão Preto')
     end
   end
+
+  context 'when is from Lead de empresas' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = 'Simmons - ESC - Botafogo - Rua General Severiano, 97 - Loja 204 - Studio do Sono'
+      lead.description = 'Rio de Janeiro - RJ'
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'Lead de empresas'
+
+      source
+    end
+
+    context 'when lead message contains salesman information' do
+      it 'returns source name' do
+        expect(switch_source).to eq('Lead de empresas - Studio do Sono')
+      end
+
+      it 'returns salesman email' do
+        expect(switch_salesman).to eq({ email: 'ruageneralseveriano97@simmons.com.br' })
+      end
+    end
+
+    context 'when lead message contains salesman information' do
+      before do
+        lead.message = 'Simmons - ESC - Centro - Av. Dr Getulio Vargas, 364 - Requintar Colchões'
+        lead.description = 'Campo Alegre - SC'
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Lead de empresas - Requintar Colchões')
+      end
+
+      it 'returns salesman email' do
+        expect(switch_salesman).to eq({ email: 'avdrgetuliovargas364@simmons.com.br' })
+      end
+    end
+
+    context 'when message is Sem loja' do
+      before do
+        lead.message = 'Sem loja'
+        lead.description = 'São Paulo - SP'
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Lead de empresas - São Paulo - SP')
+      end
+    end
+  end
 end
