@@ -27,6 +27,7 @@ module Simmons
         @source_name = @lead.source.name
 
         return unless @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
+        return if lead_message_down['sem loja']
 
         store_name = store_name_for_switch_salesman
         store_name = 'av ibirapuera 2453' if store_name.downcase['av ibirapuera']
@@ -52,16 +53,20 @@ module Simmons
         @lead.message
       end
 
+      def lead_message_down
+        lead_message.downcase
+      end
+
       def store_group_for_facebook
         @store_group = parse_facebook_lead.last
         handle_integrated_stores(@store_group)
       end
 
       def store_group_and_source_name_for_widgrid
-        return @store_group = @lead.description if lead_message.downcase == 'sem loja'
+        @source_name = @source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
+        return @store_group = @lead.description if lead_message_down == 'sem loja'
 
         @store_group = parse_widgrid_lead(lead_message).last
-        @source_name = @source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
         handle_integrated_stores(@store_group)
       end
 
@@ -113,7 +118,7 @@ module Simmons
       end
 
       def create_lead_on(store, message)
-        response = HTTP.post("https://#{store}.f1sales.org/public/api/v1/leads",json: lead_payload(message))
+        response = HTTP.post("https://#{store}.f1sales.org/public/api/v1/leads", json: lead_payload(message))
 
         JSON.parse(response.body)
       end
