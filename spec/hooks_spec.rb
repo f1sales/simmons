@@ -48,7 +48,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       lead = OpenStruct.new
       lead.source = source
       lead.message = 'Simmons - ESC - Mooca - Av. Paes de Barros, 155 - Grupo Yassin'
-      lead.id = lead_id
 
       lead
     end
@@ -56,6 +55,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:source) do
       source = OpenStruct.new
       source.name = 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO'
+
       source
     end
 
@@ -66,6 +66,21 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
       it 'returns salesman email' do
         expect(switch_salesman).to eq({ email: 'avpaesdebarros155@simmons.com.br' })
+      end
+    end
+
+    context 'when message is Sem loja' do
+      before do
+        lead.message = 'Sem loja'
+        lead.description = 'São Paulo - SP'
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Widgrid - Simmons - São Paulo - SP')
+      end
+
+      it 'returns salesman email' do
+        expect(switch_salesman).to be_nil
       end
     end
   end
