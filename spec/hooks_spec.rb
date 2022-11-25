@@ -329,28 +329,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
-  context 'when is from Google Divre Planilhas' do
-    let(:lead) do
-      lead = OpenStruct.new
-      lead.source = source
-      lead.message = 'Ribeirão Preto'
-      lead.description = nil
-
-      lead
-    end
-
-    let(:source) do
-      source = OpenStruct.new
-      source.name = 'Google Drive Planilha - Planilha - Simmons'
-
-      source
-    end
-
-    it 'returns source name' do
-      expect(switch_source).to eq('Google Drive Planilha - Planilha - Simmons - Ribeirão Preto')
-    end
-  end
-
   context 'when is from Lead de empresas' do
     let(:lead) do
       lead = OpenStruct.new
