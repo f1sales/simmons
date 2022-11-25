@@ -404,4 +404,25 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
     end
   end
+
+  context 'when is from Google Divre Planilhas' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = 'Message test'
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'Planilha - Decor American'
+
+      source
+    end
+
+    it 'returns source name' do
+      expect(switch_source).to eq('Planilha - Decor American')
+    end
+  end
 end
