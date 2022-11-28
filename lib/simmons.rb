@@ -17,6 +17,8 @@ module Simmons
         if @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
           source_name_and_store_group_for_switch_source
           "#{@source_name} - #{@store_group}"
+        elsif @source_name['Planilha']
+          @source_name
         else
           "#{@source_name} - #{lead_message}"
         end
