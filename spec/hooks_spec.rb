@@ -128,14 +128,23 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     context 'when source is from facebook' do
       let(:source_name) { 'Facebook - Simmons' }
+      let(:address) do
+        [
+          ['Butanta - Av Corifeu de Azevedo Marques, 549 - Dream Confort', 'av._corifeu_de_azevedo_marques,_549_-_butantã'],
+          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
+          ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
+          ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
+          ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
+        ].sample
+      end
       let(:message) do
-        'conditional_question_1: São Paulo; conditional_question_2: Butantã; conditional_question_3: Butanta - Av Corifeu de Azevedo Marques, 549 - Dream Confort'
+        "conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: #{address.first}"
       end
 
       let(:lead_payload) do
         {
           lead: {
-            message: 'av._corifeu_de_azevedo_marques,_549_-_butantã',
+            message: address.last,
             customer: {
               name: customer.name,
               email: customer.email,
@@ -172,11 +181,20 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     context 'when source is from widgrid' do
       let(:source_name) { 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO' }
-      let(:message) { 'Simmons - ESC - Moema - Av Ibirapuera, 3000 - Dream Confort' }
+      let(:address) do
+        [
+          ['Butanta - Av Corifeu de Azevedo Marques, 549 - Dream Confort', 'av._corifeu_de_azevedo_marques,_549_-_butantã'],
+          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
+          ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
+          ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
+          ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
+        ].sample
+      end
+      let(:message) { "Simmons - ESC - #{address.first}" }
       let(:lead_payload) do
         {
           lead: {
-            message: 'av._ibirapuera,_3000_-_moema',
+            message: address.last,
             customer: {
               name: customer.name,
               email: customer.email,

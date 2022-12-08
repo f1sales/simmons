@@ -179,13 +179,15 @@ module Simmons
 
       def parse_message_to_dreamcomfort(message)
         message_down = message.downcase
-        if message_down.include?('av corifeu de azevedo marques, 549')
+        if message_down.include?('av corifeu de azevedo marques, 547')
+          'av._corifeu_de_azevedo_marques,_547_-_butantã'
+        elsif message_down.include?('av corifeu de azevedo marques, 549')
           'av._corifeu_de_azevedo_marques,_549_-_butantã'
         elsif message_down.include?('av ibirapuera, 3000')
           'av._ibirapuera,_3000_-_moema'
         elsif message_down.include?('av ibirapuera, 2453')
           'av._ibirapuera,_2453_-_moema'
-        elsif message_down.include?('av braz leme, 757')
+        elsif message_down.include?('braz leme, 757')
           'av._braz_leme,_757_-_santana'
         end
       end
