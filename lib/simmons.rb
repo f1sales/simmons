@@ -187,6 +187,8 @@ module Simmons
           'av._ibirapuera,_2453_-_moema'
         elsif message_down.include?('av braz leme, 757')
           'av._braz_leme,_757_-_santana'
+        elsif message_down.include?('av sumare, 1101')
+          'perdizes_-_av_sumare,_1101_- dream_comfort'
         end
       end
     end
