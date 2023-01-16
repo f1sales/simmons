@@ -130,10 +130,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       let(:source_name) { 'Facebook - Simmons' }
       let(:address) do
         [
-          ['Butanta - Av Corifeu de Azevedo Marques, 549 - Dream Confort', 'av._corifeu_de_azevedo_marques,_549_-_butantã'],
           ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
           ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
           ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
+          ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
           ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
         ].sample
       end
@@ -183,10 +183,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       let(:source_name) { 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO' }
       let(:address) do
         [
-          ['Butanta - Av Corifeu de Azevedo Marques, 549 - Dream Confort', 'av._corifeu_de_azevedo_marques,_549_-_butantã'],
           ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
           ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
           ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
+          ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
           ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
         ].sample
       end
