@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def gen_password
   password = 3.times.map { rand(1..9) }.join('')
   password += %i[@ $ ! & #].sample.to_s
@@ -18,7 +20,6 @@ Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 adm_names = [
   'Sonho e Sono Lj 1'
 ]
-
 
 stores = [
   'sonho e sono-av meriti 1395'
