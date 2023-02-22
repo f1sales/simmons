@@ -12,17 +12,27 @@ def emailize(string)
   string.dup.force_encoding('UTF-8').unicode_normalize(:nfkd).encode('ASCII', replace: '').downcase.gsub(/\W+/, '')
 end
 
-SIMMONS_EMAIL_DOMAIN = '@simmons.com.br'.freeze
+SIMMONS_EMAIL_DOMAIN = '@simmons.com.br'
 
 Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Sonho e Sono Lj 1'
+  'Casa Orner',
+  '(DreamComfort) Simmons Concept',
+  'Night Perfect Planalto Paulista',
+  'Simmons Sao Francisco',
+  'Simmons Itaipava',
+  'Simmons Icarai'
 ]
 
 stores = [
-  'sonho e sono-av meriti 1395'
+  'Casa Orner - Rua Luiz Scavone, 511',
+  'DreamComfort - Av Avenida Morumbi, 6930',
+  'NightPerfect - Av Avenida Indianopolis, 1423',
+  'Simmons Sao Francisco - Avenida Rui Barbosa, 712',
+  'Simmons Itaipava - Est. Uniao e Industria, 10276',
+  'Simmons Icarai - Rua Dr Tavares de Macedo, 71'
 ]
 
 resp_s = []
@@ -40,7 +50,8 @@ stores.each_with_index do |store, i|
   puts team
 
   if Admin.where(email: admin_email).first.nil?
-    admin_attr = { email: admin_email, password: (gen_password + gen_password), name: admin_name, confirmed_at: Time.now, team: team }
+    admin_attr = { email: admin_email, password: (gen_password + gen_password), name: admin_name,
+                   confirmed_at: Time.now, team: team }
     Admin.create!(admin_attr)
     puts "\n\nAdmin"
     puts admin_attr
@@ -51,7 +62,8 @@ stores.each_with_index do |store, i|
     puts '-------'
   end
 
-  salesman_attr = { name: salesman_name, email: salesman_email, teams: [team], phone: rand(99999999999), password: gen_password }
+  salesman_attr = { name: salesman_name, email: salesman_email, teams: [team], phone: rand(99_999_999_999),
+                    password: gen_password }
   Salesman.create!(salesman_attr)
   puts "\n\nSalesman"
   puts salesman_attr
