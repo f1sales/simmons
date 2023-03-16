@@ -18,21 +18,11 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Casa Orner',
-  '(DreamComfort) Simmons Concept',
-  'Night Perfect Planalto Paulista',
-  'Simmons Sao Francisco',
-  'Simmons Itaipava',
-  'Simmons Icarai'
+  'Confortalle Braz Leme'
 ]
 
 stores = [
-  'Casa Orner - Rua Luiz Scavone, 511',
-  'DreamComfort - Av Avenida Morumbi, 6930',
-  'NightPerfect - Av Avenida Indianopolis, 1423',
-  'Simmons Sao Francisco - Avenida Rui Barbosa, 712',
-  'Simmons Itaipava - Est. Uniao e Industria, 10276',
-  'Simmons Icarai - Rua Dr Tavares de Macedo, 71'
+  'Santana - Av Braz Leme, 757 - Confortale'
 ]
 
 resp_s = []
@@ -41,7 +31,7 @@ stores.each_with_index do |store, i|
   # 1. admmin
   # 2. gen teams
   # 3. gen salesman
-  team_name, salesman_name = store.split('-').map(&:strip)
+  salesman_name, team_name = store.split('-')[1..].map(&:strip)
   salesman_email = emailize(salesman_name)
   salesman_email += SIMMONS_EMAIL_DOMAIN
   admin_name = adm_names[i]
@@ -73,3 +63,4 @@ stores.each_with_index do |store, i|
   puts "Pattern: #{resp_s[i][:email]},#{resp_s[i][:password]}"
   puts '-------'
 end
+
