@@ -186,8 +186,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
           ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
           ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
-          ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
-          ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
+          ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema']
         ].sample
       end
       let(:message) { "Simmons - ESC - #{address.first}" }
@@ -271,7 +270,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
     end
 
-    context 'when source is from widgrid to Braz Leme' do
+    context 'when source is from widgrid to Av Sumare' do
       let(:source_name) { 'Widgrid - Simmons' }
       let(:message) { 'Simmons - ESC - Perdizes - Av Sumare, 1101 - Dream Comfort' }
 
@@ -300,6 +299,48 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
       it 'returns source name' do
         expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort')
+      end
+
+      it 'post to simmons dream comfort' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+      end
+    end
+
+    context 'when source is from widgrid to Avenida Morumbi' do
+      let(:source_name) { 'Widgrid - Simmons' }
+      let(:message) { 'Simmons - ESC - Morumbi - Av Avenida Morumbi, 6930 - DreamComfort' }
+
+      let(:lead_payload) do
+        {
+          lead: {
+            message: 'morumbi_-_av_avenida_morumbi,_6930',
+            customer: {
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone
+            },
+            product: {
+              name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
+            },
+            source: {
+              name: 'Simmons - Widgrid'
+            }
+          }
+        }
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Widgrid - Simmons - DreamComfort')
       end
 
       it 'post to simmons dream comfort' do
