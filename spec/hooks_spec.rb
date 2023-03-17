@@ -89,6 +89,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     let(:source) do
       source = OpenStruct.new
       source.name = source_name
+
       source
     end
 
@@ -130,7 +131,8 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       let(:source_name) { 'Facebook - Simmons' }
       let(:address) do
         [
-          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
+          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort',
+           'av._corifeu_de_azevedo_marques,_547_-_butantã'],
           ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
           ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
           ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
@@ -183,7 +185,8 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       let(:source_name) { 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO' }
       let(:address) do
         [
-          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort', 'av._corifeu_de_azevedo_marques,_547_-_butantã'],
+          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort',
+           'av._corifeu_de_azevedo_marques,_547_-_butantã'],
           ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
           ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
           ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema']
@@ -355,6 +358,353 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
+  context 'when is to simmons better sleep' do
+    let(:source) do
+      source = OpenStruct.new
+      source.name = source_name
+
+      source
+    end
+
+    let(:customer) do
+      customer = OpenStruct.new
+      customer.name = 'Marcio Santos'
+      customer.phone = '1198788899'
+      customer.email = 'marcio@f1sales.com.br'
+
+      customer
+    end
+
+    let(:product) do
+      product = OpenStruct.new
+      product.name = 'Simmons'
+
+      product
+    end
+
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.message = message
+      lead.source = source
+      lead.product = product
+      lead.customer = customer
+      lead.id = lead_id
+
+      lead
+    end
+
+    let(:call_url) { 'https://bettersleepcolchoes.f1sales.org/public/api/v1/leads' }
+
+    before do
+      stub_request(:post, call_url)
+        .with(body: lead_payload.to_json).to_return(status: 200, body: lead_created_payload.to_json, headers: {})
+    end
+
+    context 'when is from Widgrid' do
+      context 'when source is from widgrid to Better Sleep Aldeota' do
+        let(:source_name) { 'Widgrid - Simmons' }
+        let(:message) { 'Simmons - ESC - Aldeota - Av Padre Antonio Tomas, 749 - Better Sleep Aldeota' }
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Widgrid'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Aldeota')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+
+      context 'when source is from widgrid to Better Sleep Antonio Sales' do
+        let(:source_name) { 'Widgrid - Simmons' }
+        let(:message) { 'Simmons - ESC - Dionisio Torres - Av Antonio Sales, 2895 - Better Sleep Antonio Sales' }
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Widgrid'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Antonio Sales')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+
+      context 'when source is from widgrid to Better Sleep Cambeba' do
+        let(:source_name) { 'Widgrid - Simmons' }
+        let(:message) { 'Simmons - ESC - Seis Bocas - Av. Washington Soares, 4527 - Better Sleep Cambeba' }
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Widgrid'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Cambeba')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+
+      context 'when source is from widgrid to Better Sleep Cambeba' do
+        let(:source_name) { 'Widgrid - Simmons' }
+        let(:message) { 'Simmons - ESC - Seis Bocas - Av. Washington Soares, 4527 - Better Sleep Cambeba' }
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Widgrid'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Cambeba')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+    end
+
+    context 'when lead is from Facebook' do
+      context 'when source is from widgrid to Better Sleep Aldeota' do
+        let(:source_name) { 'Facebook - Simmons' }
+        let(:message) do
+          'conditional_question_2: Fortaleza; conditional_question_3: Aldeota - Av Padre Antonio Tomas, 749 - Better Sleep Aldeota; conditional_question_1: Ceará'
+        end
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Facebook'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Aldeota')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+
+      context 'when source is from widgrid to Better Sleep Antonio Sales' do
+        let(:source_name) { 'Facebook - Simmons' }
+        let(:message) do
+          'conditional_question_1: Ceará; conditional_question_2: Fortaleza; conditional_question_3: Dionisio Torres - Av Antonio Sales, 2895 - Better Sleep Antonio Sales'
+        end
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Facebook'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Antonio Sales')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+
+      context 'when source is from widgrid to Better Sleep Cambeba' do
+        let(:source_name) { 'Facebook - Simmons' }
+        let(:message) do
+          'conditional_question_1: Ceará; conditional_question_2: Fortaleza; conditional_question_3: Seis Bocas - Av. Washington Soares, 4527 - Better Sleep Cambeba'
+        end
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: message,
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Facebook'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Cambeba')
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+    end
+  end
+
   context 'when Moema was unified' do
     let(:lead) do
       lead = OpenStruct.new
@@ -378,7 +728,9 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
 
     context 'when the address is Av. Ibirapuera, 3000' do
-      before { lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: Moema - Av Ibirapuera, 3000 - Dream Confort' }
+      before do
+        lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: Moema - Av Ibirapuera, 3000 - Dream Confort'
+      end
 
       it 'returns salesman email' do
         expect(switch_salesman).to eq({ email: 'avibirapuera2453@simmons.com.br' })
