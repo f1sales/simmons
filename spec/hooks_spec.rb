@@ -147,6 +147,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         {
           lead: {
             message: address.last,
+            description: 'Dream Confort',
             customer: {
               name: customer.name,
               email: customer.email,
@@ -197,6 +198,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         {
           lead: {
             message: address.last,
+            description: 'Dream Confort',
             customer: {
               name: customer.name,
               email: customer.email,
@@ -239,6 +241,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         {
           lead: {
             message: 'av._braz_leme,_757_-_santana',
+            description: 'Dream Confort',
             customer: {
               name: customer.name,
               email: customer.email,
@@ -281,6 +284,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         {
           lead: {
             message: 'perdizes_-_av_sumare,_1101_- dream_comfort',
+            description: 'Dream Comfort',
             customer: {
               name: customer.name,
               email: customer.email,
@@ -323,6 +327,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         {
           lead: {
             message: 'morumbi_-_av_avenida_morumbi,_6930',
+            description: 'DreamComfort',
             customer: {
               name: customer.name,
               email: customer.email,
@@ -409,6 +414,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Aldeota',
               customer: {
                 name: customer.name,
                 email: customer.email,
@@ -451,6 +457,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Antonio Sales',
               customer: {
                 name: customer.name,
                 email: customer.email,
@@ -493,6 +500,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Cambeba',
               customer: {
                 name: customer.name,
                 email: customer.email,
@@ -535,6 +543,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Cambeba',
               customer: {
                 name: customer.name,
                 email: customer.email,
@@ -581,6 +590,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Aldeota',
               customer: {
                 name: customer.name,
                 email: customer.email,
@@ -625,6 +635,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Antonio Sales',
               customer: {
                 name: customer.name,
                 email: customer.email,
@@ -669,6 +680,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           {
             lead: {
               message: message,
+              description: 'Better Sleep Cambeba',
               customer: {
                 name: customer.name,
                 email: customer.email,
