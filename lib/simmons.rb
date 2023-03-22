@@ -138,6 +138,7 @@ module Simmons
         {
           lead: {
             message: message,
+            description: @store_group,
             customer: customer_data,
             product: product_name,
             transferred_path: transferred_path,
