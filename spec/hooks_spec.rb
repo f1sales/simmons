@@ -715,6 +715,51 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
       end
     end
+
+    context 'when source is from widgrid to MOC Better Sleep' do
+      let(:source_name) { 'Facebook - Simmons' }
+      let(:message) do
+        'conditional_question_1: Ceará; conditional_question_2: Fortaleza; conditional_question_3: Seis Bocas - Av. Washington Soares, 4527 - Simmons MOC Better Sleep'
+      end
+
+      let(:lead_payload) do
+        {
+          lead: {
+            message: message,
+            description: 'Simmons MOC Better Sleep',
+            customer: {
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone
+            },
+            product: {
+              name: product.name
+            },
+            transferred_path: {
+              from: 'simmons',
+              id: lead_id
+            },
+            source: {
+              name: 'Simmons - Facebook'
+            }
+          }
+        }
+      end
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Facebook - Simmons - Simmons MOC Better Sleep')
+      end
+
+      it 'post to simmons dream comfort' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(WebMock).not_to have_requested(:post, call_url)
+      end
+    end
   end
 
   context 'when Moema was unified' do
