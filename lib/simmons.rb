@@ -99,6 +99,8 @@ module Simmons
 
       def handle_integrated_stores(store_group)
         store_group_down = store_group.downcase.gsub(' ', '')
+        return if store_group_down['mocbettersleep']
+
         store_group_down = 'bettersleep' if store_group_down['bettersleep']
         integrated_stores = %w[dreamcomfort dreamconfort confortale mega bettersleep]
         send("forward_to_#{store_group_down}") if integrated_stores.include?(store_group_down)
