@@ -102,16 +102,12 @@ module Simmons
         return if store_group_down['mocbettersleep']
 
         store_group_down = 'bettersleep' if store_group_down['bettersleep']
-        integrated_stores = %w[dreamcomfort dreamconfort confortale mega bettersleep]
+        integrated_stores = %w[dreamcomfort dreamconfort mega bettersleep]
         send("forward_to_#{store_group_down}") if integrated_stores.include?(store_group_down)
       end
 
       def forward_to_dreamcomfort
         create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
-      end
-
-      def forward_to_confortale
-        create_lead_on('confortalecolchoes', lead_message)
       end
 
       def forward_to_mega

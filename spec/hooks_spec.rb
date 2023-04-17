@@ -43,6 +43,35 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
+  context 'when came from facebook' do
+    context 'when a store no longer has an individual store' do
+      let(:lead) do
+        lead = OpenStruct.new
+        lead.source = source
+        lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Caetano do Sul; conditional_question_3: Mirandopolis - Av Jabaquara, 938 - Confortale'
+        lead.id = lead_id
+
+        lead
+      end
+
+      let(:source) do
+        source = OpenStruct.new
+        source.name = 'Facebook - Simmons'
+        source
+      end
+
+      context 'when has store group' do
+        it 'returns source name' do
+          expect(switch_source).to eq('Facebook - Simmons - Confortale')
+        end
+
+        it 'returns salesman email' do
+          expect(switch_salesman).to eq({ email: 'avjabaquara938@simmons.com.br' })
+        end
+      end
+    end
+  end
+
   context 'when came from widgrid' do
     let(:lead) do
       lead = OpenStruct.new
