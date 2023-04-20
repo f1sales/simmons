@@ -103,7 +103,11 @@ module Simmons
 
         store_group_down = 'bettersleep' if store_group_down['bettersleep']
         integrated_stores = %w[dreamcomfort dreamconfort mega bettersleep mattressone]
-        send("forward_to_#{store_group_down}") if integrated_stores.include?(store_group_down)
+        return unless integrated_stores.include?(store_group_down)
+
+        send("forward_to_#{store_group_down}")
+
+        @lead.interaction = :contacted
       end
 
       def forward_to_dreamcomfort

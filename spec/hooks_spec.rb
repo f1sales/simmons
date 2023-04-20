@@ -200,6 +200,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         expect(switch_source).to eq('Facebook - Simmons - Dream Confort')
       end
 
+      it 'marks the lead as contacted' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(lead.interaction).to be(:contacted)
+      end
+
       it 'post to simmons dream comfort' do
         begin
           switch_source
@@ -294,6 +304,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         expect(switch_source).to eq('Widgrid - Simmons - Dream Confort')
       end
 
+      it 'marks the lead as contacted' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(lead.interaction).to be(:contacted)
+      end
+
       it 'post to simmons dream comfort' do
         begin
           switch_source
@@ -378,6 +398,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
       it 'returns source name' do
         expect(switch_source).to eq('Widgrid - Simmons - DreamComfort')
+      end
+
+      it 'marks the lead as contacted' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(lead.interaction).to be(:contacted)
       end
 
       it 'post to simmons dream comfort' do
@@ -475,6 +505,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           end
 
           expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+
+        it 'marks the lead as contacted' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(lead.interaction).to be(:contacted)
         end
       end
 
@@ -788,6 +828,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
         expect(WebMock).not_to have_requested(:post, call_url)
       end
+
+      it 'marks the lead as contacted' do
+        begin
+          switch_source
+        rescue StandardError
+          nil
+        end
+
+        expect(lead.interaction).to be_nil
+      end
     end
   end
 
@@ -875,6 +925,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
           expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
         end
+
+        it 'marks the lead as contacted' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(lead.interaction).to be(:contacted)
+        end
       end
     end
 
@@ -921,6 +981,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           end
 
           expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+
+        it 'marks the lead as contacted' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(lead.interaction).to be(:contacted)
         end
       end
     end
@@ -1075,6 +1145,16 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     it 'returns source name' do
       expect(switch_source).to eq('Planilha - Decor American')
+    end
+
+    it 'marks the lead as contacted' do
+      begin
+        switch_source
+      rescue StandardError
+        nil
+      end
+
+      expect(lead.interaction).to be_nil
     end
   end
 end
