@@ -99,16 +99,19 @@ module Simmons
 
       def handle_integrated_stores(store_group)
         store_group_down = store_group.downcase.gsub(' ', '')
-        integrated_stores = %w[dreamcomfort dreamconfort confortale mega]
-        send("forward_to_#{store_group_down}") if integrated_stores.include?(store_group_down)
+        return if store_group_down['mocbettersleep']
+
+        store_group_down = 'bettersleep' if store_group_down['bettersleep']
+        integrated_stores = %w[dreamcomfort dreamconfort mega bettersleep mattressone simmonsstore]
+        return unless integrated_stores.include?(store_group_down)
+
+        send("forward_to_#{store_group_down}")
+
+        @lead.interaction = :contacted
       end
 
       def forward_to_dreamcomfort
         create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
-      end
-
-      def forward_to_confortale
-        create_lead_on('confortalecolchoes', lead_message)
       end
 
       def forward_to_mega
@@ -117,6 +120,18 @@ module Simmons
 
       def forward_to_dreamconfort
         create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
+      end
+
+      def forward_to_bettersleep
+        create_lead_on('bettersleepcolchoes', lead_message)
+      end
+
+      def forward_to_mattressone
+        create_lead_on('ortoluxo', lead_message)
+      end
+
+      def forward_to_simmonsstore
+        create_lead_on('megacolchoes', lead_message)
       end
 
       def create_lead_on(store, message)
@@ -133,6 +148,7 @@ module Simmons
         {
           lead: {
             message: message,
+            description: @store_group,
             customer: customer_data,
             product: product_name,
             transferred_path: transferred_path,
@@ -170,7 +186,7 @@ module Simmons
 
       def parse_source(source_name)
         splitted_name = source_name.split(' - ')
-        if source_name.downcase.include?('widgrid')
+        if source_name.downcase['widgrid']
           splitted_name.map(&:capitalize)[0..1]
         else
           splitted_name
@@ -179,18 +195,20 @@ module Simmons
 
       def parse_message_to_dreamcomfort(message)
         message_down = message.downcase
-        if message_down.include?('av corifeu de azevedo marques, 547')
+        if message_down['av corifeu de azevedo marques, 547']
           'av._corifeu_de_azevedo_marques,_547_-_butantã'
-        elsif message_down.include?('av ibirapuera, 3399')
+        elsif message_down['av ibirapuera, 3399']
           'av._ibirapuera,_3399_-_moema'
-        elsif message_down.include?('av ibirapuera, 3000')
+        elsif message_down['av ibirapuera, 3000']
           'av._ibirapuera,_3000_-_moema'
-        elsif message_down.include?('av ibirapuera, 2453')
+        elsif message_down['av ibirapuera, 2453']
           'av._ibirapuera,_2453_-_moema'
-        elsif message_down.include?('braz leme, 757')
+        elsif message_down['braz leme, 757']
           'av._braz_leme,_757_-_santana'
-        elsif message_down.include?('av sumare, 1101')
+        elsif message_down['av sumare, 1101']
           'perdizes_-_av_sumare,_1101_- dream_comfort'
+        elsif message_down['av avenida morumbi, 6930']
+          'morumbi_-_av_avenida_morumbi,_6930'
         end
       end
     end
