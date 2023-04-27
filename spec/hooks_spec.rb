@@ -819,23 +819,17 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         expect(switch_source).to eq('Facebook - Simmons - Simmons MOC Better Sleep')
       end
 
-      it 'post to simmons dream comfort' do
-        begin
-          switch_source
-        rescue StandardError
-          nil
-        end
+      before do
+        switch_source
+      rescue StandardError
+        nil
+      end
 
+      it 'post to simmons dream comfort' do
         expect(WebMock).not_to have_requested(:post, call_url)
       end
 
       it 'marks the lead as contacted' do
-        begin
-          switch_source
-        rescue StandardError
-          nil
-        end
-
         expect(lead.interaction).to be_nil
       end
     end
@@ -916,23 +910,17 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           expect(switch_source).to eq('Widgrid - Simmons - Mattress One')
         end
 
-        it 'post to simmons dream comfort' do
-          begin
-            switch_source
-          rescue StandardError
-            nil
-          end
+        before do
+          switch_source
+        rescue StandardError
+          nil
+        end
 
+        it 'post to simmons dream comfort' do
           expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
         end
 
         it 'marks the lead as contacted' do
-          begin
-            switch_source
-          rescue StandardError
-            nil
-          end
-
           expect(lead.interaction).to be(:contacted)
         end
       end
@@ -973,23 +961,17 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
           expect(switch_source).to eq('Facebook - Simmons - Mattress One')
         end
 
-        it 'post to simmons dream comfort' do
-          begin
-            switch_source
-          rescue StandardError
-            nil
-          end
+        before do
+          switch_source
+        rescue StandardError
+          nil
+        end
 
+        it 'post to simmons dream comfort' do
           expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
         end
 
         it 'marks the lead as contacted' do
-          begin
-            switch_source
-          rescue StandardError
-            nil
-          end
-
           expect(lead.interaction).to be(:contacted)
         end
       end
