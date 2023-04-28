@@ -44,7 +44,9 @@ module Simmons
       end
 
       def source_name_and_store_group_for_switch_source
-        if @source_name['Facebook']
+        if lead_message_down['simmons concierge']
+          @store_group = 'Simmons Concierge'
+        elsif @source_name['Facebook']
           store_group_for_facebook
         elsif source_name_down['widgrid'] || source_name_down['lead de']
           store_group_and_source_name_for_widgrid
@@ -73,7 +75,9 @@ module Simmons
       end
 
       def store_name_for_switch_salesman
-        if @source_name['Facebook']
+        if lead_message_down['simmons concierge']
+          'Simmons Concierge'
+        elsif @source_name['Facebook']
           parse_facebook_lead[1]
         elsif @source_name.downcase['widgrid'] || source_name_down['lead de']
           parse_widgrid_lead(lead_message)[1]

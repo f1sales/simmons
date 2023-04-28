@@ -1225,6 +1225,57 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
+  context 'when lead is Simmons Concierge' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = 'Simmons Concierge'
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'Lead de empresas'
+
+      source
+    end
+
+    let(:salesman_anwser) { { email: 'simmonsconcierge@simmons.com.br' } }
+
+    it 'returns source Lead de empresas' do
+      expect(switch_source).to eq('Lead de empresas - Simmons Concierge')
+    end
+
+    it 'returns salesman' do
+      expect(switch_salesman).to eq(salesman_anwser)
+    end
+
+    context 'when source is Facebook' do
+      before { source.name = 'Facebook - Simmons' }
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Facebook - Simmons - Simmons Concierge')
+      end
+
+      it 'returns salesman' do
+        expect(switch_salesman).to eq(salesman_anwser)
+      end
+    end
+
+    context 'when source is Widgrid' do
+      before { source.name = 'Widgrid - Simmons' }
+
+      it 'returns source name' do
+        expect(switch_source).to eq('Widgrid - Simmons - Simmons Concierge')
+      end
+
+      it 'returns salesman' do
+        expect(switch_salesman).to eq(salesman_anwser)
+      end
+    end
+  end
+
   context 'when is from Google Divre Planilhas' do
     let(:lead) do
       lead = OpenStruct.new
