@@ -18,11 +18,17 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Confortalle Braz Leme'
+  'Simmons Concierge Adm',
+  'Simmons Concierge Adm',
+  'Simmons Concierge Adm',
+  'Simmons Concierge Adm'
 ]
 
 stores = [
-  'Santana - Av Braz Leme, 757 - Confortale'
+  'Centro - Simmons Concierge 2 - Simmons Concierge Adm',
+  'Centro - Simmons Concierge 3 - Simmons Concierge Adm',
+  'Centro - Simmons Concierge 4 - Simmons Concierge Adm',
+  'Centro - Simmons Concierge 5 - Simmons Concierge Adm'
 ]
 
 resp_s = []
@@ -48,7 +54,7 @@ stores.each_with_index do |store, i|
     resp_a << admin_attr
     puts '-------'
     puts "Email: #{resp_a[0][:email]} -> Password: #{resp_a[0][:password]}"
-    puts "Pattern: #{resp_a[0][:email]},#{resp_a[0][:password]}"
+    puts "Pattern: #{resp_a[i][:email]},#{resp_a[i][:password]}"
     puts '-------'
   end
 
