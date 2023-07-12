@@ -68,7 +68,7 @@ module Simmons
 
       def store_group_and_source_name_for_widgrid
         @source_name = @source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
-        return @store_group = @lead.description if lead_message_down == 'sem loja'
+        return @store_group = 'Concierge' if lead_message_down == 'sem loja'
 
         @store_group = parse_widgrid_lead(lead_message).last
         handle_integrated_stores(@store_group)
