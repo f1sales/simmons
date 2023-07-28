@@ -14,10 +14,9 @@ module Simmons
         @lead = lead
         @source_name = @lead.source.name
 
-        if @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
-          source_name_and_store_group_for_switch_source
-          "#{@source_name} - #{@store_group}"
-        elsif @source_name['Planilha']
+        return face_wid_le_source if face_wid_le?
+
+        if @source_name['Planilha']
           @source_name
         else
           "#{@source_name} - #{lead_message}"
@@ -28,7 +27,7 @@ module Simmons
         @lead = lead
         @source_name = @lead.source.name
 
-        return unless @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
+        return unless face_wid_le?
         return if lead_message_down['sem loja']
 
         store_name = store_name_for_switch_salesman
@@ -38,6 +37,25 @@ module Simmons
       end
 
       private
+
+      def face_wid_le?
+        @source_name['Facebook'] || source_name_down['widgrid'] || source_name_down['lead de empresas']
+      end
+
+      def face_wid_le_source
+        source_name_and_store_group_for_switch_source
+        return "#{source_name_swith_source} - exclusivo" if from_simmons_dreamcomfort?
+
+        source_name_swith_source
+      end
+
+      def from_simmons_dreamcomfort?
+        source_name_swith_source['Simmons - Dream Comfort'] || source_name_swith_source['Simmons - Dream Confort']
+      end
+
+      def source_name_swith_source
+        "#{@source_name} - #{@store_group}"
+      end
 
       def source_name_down
         @source_name.downcase
@@ -115,7 +133,7 @@ module Simmons
       end
 
       def forward_to_dreamcomfort
-        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
       end
 
       def forward_to_mega
@@ -123,7 +141,7 @@ module Simmons
       end
 
       def forward_to_dreamconfort
-        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort(lead_message))
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
       end
 
       def forward_to_bettersleep
@@ -197,23 +215,50 @@ module Simmons
         end.reverse.join(' - ')
       end
 
-      def parse_message_to_dreamcomfort(message)
-        message_down = message.downcase
-        if message_down['av corifeu de azevedo marques, 547']
-          'av._corifeu_de_azevedo_marques,_547_-_butantã'
-        elsif message_down['av ibirapuera, 3399']
-          'av._ibirapuera,_3399_-_moema'
-        elsif message_down['av ibirapuera, 3000']
-          'av._ibirapuera,_3000_-_moema'
-        elsif message_down['av ibirapuera, 2453']
-          'av._ibirapuera,_2453_-_moema'
-        elsif message_down['braz leme, 757']
-          'av._braz_leme,_757_-_santana'
-        elsif message_down['av sumare, 1101']
-          'perdizes_-_av_sumare,_1101_- dream_comfort'
-        elsif message_down['av avenida morumbi, 6930']
-          'morumbi_-_av_avenida_morumbi,_6930'
-        end
+      def parse_message_to_dreamcomfort
+        return 'av._corifeu_de_azevedo_marques,_547_-_butantã' if corifeu?
+        return ibirapuera_message if av_ibirapuera?
+        return 'av._braz_leme,_757_-_santana' if braz_leme?
+        return 'perdizes_-_av_sumare,_1101_- dream_comfort' if sumare?
+        return 'morumbi_-_av_avenida_morumbi,_6930' if morumbi?
+      end
+
+      def corifeu?
+        lead_message_down['av corifeu de azevedo marques, 547']
+      end
+
+      def ibirapuera_3399?
+        lead_message_down['av ibirapuera, 3399']
+      end
+
+      def ibirapuera_3000?
+        lead_message_down['av ibirapuera, 3000']
+      end
+
+      def ibirapuera_2453?
+        lead_message_down['av ibirapuera, 2453']
+      end
+
+      def braz_leme?
+        lead_message_down['braz leme, 757']
+      end
+
+      def sumare?
+        lead_message_down['av sumare, 1101']
+      end
+
+      def morumbi?
+        lead_message_down['av avenida morumbi, 6930']
+      end
+
+      def av_ibirapuera?
+        lead_message_down['av ibirapuera']
+      end
+
+      def ibirapuera_message
+        return 'av._ibirapuera,_3399_-_moema' if ibirapuera_3399?
+        return 'av._ibirapuera,_3000_-_moema' if ibirapuera_3000?
+        return 'av._ibirapuera,_2453_-_moema' if ibirapuera_2453?
       end
     end
   end

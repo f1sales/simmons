@@ -184,7 +184,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Facebook - Simmons - Dream Confort')
+        expect(switch_source).to eq('Facebook - Simmons - Dream Confort - exclusivo')
       end
 
       it 'marks the lead as contacted' do
@@ -245,7 +245,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - exclusivo')
       end
 
       it 'post to simmons dream comfort' do
@@ -288,7 +288,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - exclusivo')
       end
 
       it 'marks the lead as contacted' do
@@ -341,7 +341,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort - exclusivo')
       end
 
       it 'post to simmons dream comfort' do
