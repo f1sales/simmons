@@ -18,11 +18,21 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
+  'Confortale - Sao Caetano do Sul',
+  'Rei do Sono',
+  'Decoramix - Penha',
+  'Grupo Alfa',
+  'Simmons Presence',
   'Sublime Praia',
   'Nigh Perfect Prime Pacaembu'
 ]
 
 stores = [
+  'Santo Antonio - Av Goias, 750 - Confortale',
+  'Adrianopolis - Shopping Manauara, Loja 44 - Rei do Sono',
+  'Penha - Av Gov. Carvalho Pinto,1600 - Decoramix',
+  'Nova Campinas - Av Dr Hermas Braga, 328 - Grupo Alfa',
+  'Brooklin - Rua Joaquim Nabuco, 151 - Simmons Presence',
   'Sarandi -  Avenida Sertorio, 8000 - Sublime Praia',
   'Pacaembu - Av Pacaembu, 1553 - Night Perfect'
 ]
@@ -41,7 +51,7 @@ stores.each_with_index do |store, i|
   team = Team.find_or_create_by!(name: team_name)
   puts team
   puts '-------'
-  puts "Team: #{team.name} - #{team.id}"
+  puts "Team: #{team.name} - ID: #{team.id}"
   puts '-------'
 
   if Admin.where(email: admin_email).first.nil?
@@ -52,8 +62,9 @@ stores.each_with_index do |store, i|
     puts admin_attr
     resp_a << admin_attr
     puts '-------'
-    puts "Email: #{resp_a[0][:email]} -> Password: #{resp_a[0][:password]}"
-    puts "Pattern: #{resp_a[i][:email]},#{resp_a[i][:password]}"
+    n = resp_a.size - 1
+    puts "Email: #{resp_a[n][:email]} -> Password: #{resp_a[n][:password]}"
+    puts "Pattern: #{resp_a[n][:email]},#{resp_a[n][:password]}"
     puts '-------'
   end
 
@@ -67,5 +78,8 @@ stores.each_with_index do |store, i|
   puts "Email: #{resp_s[i][:email]} -> Password: #{resp_s[i][:password]}"
   puts "Pattern: #{resp_s[i][:email]},#{resp_s[i][:password]}"
   puts '-------'
+  puts "\n"
+  puts '=======' * 10
+  puts '=======' * 10
+  puts "\n\n\n"
 end
-
