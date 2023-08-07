@@ -18,17 +18,13 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Simmons Concierge Adm',
-  'Simmons Concierge Adm',
-  'Simmons Concierge Adm',
-  'Simmons Concierge Adm'
+  'Sublime Praia',
+  'Nigh Perfect Prime Pacaembu'
 ]
 
 stores = [
-  'Centro - Simmons Concierge 2 - Simmons Concierge Adm',
-  'Centro - Simmons Concierge 3 - Simmons Concierge Adm',
-  'Centro - Simmons Concierge 4 - Simmons Concierge Adm',
-  'Centro - Simmons Concierge 5 - Simmons Concierge Adm'
+  'Sarandi -  Avenida Sertorio, 8000 - Sublime Praia',
+  'Pacaembu - Av Pacaembu, 1553 - Night Perfect'
 ]
 
 resp_s = []
@@ -44,6 +40,9 @@ stores.each_with_index do |store, i|
   admin_email = "#{emailize(team_name)}#{SIMMONS_EMAIL_DOMAIN}"
   team = Team.find_or_create_by!(name: team_name)
   puts team
+  puts '-------'
+  puts "Team: #{team.name} - #{team.id}"
+  puts '-------'
 
   if Admin.where(email: admin_email).first.nil?
     admin_attr = { email: admin_email, password: (gen_password + gen_password), name: admin_name,
