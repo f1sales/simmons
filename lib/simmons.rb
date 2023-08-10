@@ -208,11 +208,15 @@ module Simmons
 
       def parse_source(source_name)
         splitted_name = source_name.split(' - ')
-        if source_name.downcase['widgrid']
-          splitted_name.map(&:capitalize)[0..1]
-        else
-          splitted_name
-        end.reverse.join(' - ')
+        source_return = if source_name.downcase['widgrid']
+                          splitted_name.map(&:capitalize)[0..1]
+                        else
+                          splitted_name
+                        end.reverse.join(' - ')
+
+        return "#{source_return} - Dream Comfort - exclusivo" if from_simmons_dreamcomfort?
+
+        source_return
       end
 
       def parse_message_to_dreamcomfort
