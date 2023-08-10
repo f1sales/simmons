@@ -177,7 +177,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Facebook'
+              name: 'Simmons - Facebook - Dream Comfort - exclusivo'
             }
           }
         }
@@ -238,7 +238,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
             }
           }
         }
@@ -281,7 +281,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
             }
           }
         }
@@ -334,7 +334,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
             }
           }
         }
