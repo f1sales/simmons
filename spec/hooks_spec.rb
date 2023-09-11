@@ -50,23 +50,10 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         expect(switch_salesman).to eq({ email: 'avluisdummont901@simmons.com.br' })
       end
     end
-  end
 
-  context 'when came from facebook' do
     context 'when a store no longer has an individual store' do
-      let(:lead) do
-        lead = OpenStruct.new
-        lead.source = source
+      before do
         lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Caetano do Sul; conditional_question_3: Mirandopolis - Av Jabaquara, 938 - Confortale'
-        lead.id = lead_id
-
-        lead
-      end
-
-      let(:source) do
-        source = OpenStruct.new
-        source.name = 'Facebook - Simmons'
-        source
       end
 
       context 'when has store group' do
@@ -114,7 +101,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - São Paulo - SP')
+        expect(switch_source).to eq('Widgrid - Simmons - Concierge')
       end
 
       it 'returns salesman email' do
@@ -190,14 +177,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Facebook'
+              name: 'Simmons - Facebook - Dream Comfort - exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Facebook - Simmons - Dream Confort')
+        expect(switch_source).to eq('Facebook - Simmons - Dream Confort - exclusivo')
       end
 
       it 'marks the lead as contacted' do
@@ -251,14 +238,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - exclusivo')
       end
 
       it 'post to simmons dream comfort' do
@@ -294,14 +281,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - exclusivo')
       end
 
       it 'marks the lead as contacted' do
@@ -347,14 +334,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort - exclusivo')
       end
 
       it 'post to simmons dream comfort' do
@@ -1145,7 +1132,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
 
     it 'returns source name' do
-      expect(switch_source).to eq('Widgrid - Simmons - Apuí - AM')
+      expect(switch_source).to eq('Widgrid - Simmons - Concierge')
     end
   end
 
@@ -1220,7 +1207,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Lead de empresas - São Paulo - SP')
+        expect(switch_source).to eq('Lead de empresas - Concierge')
       end
     end
   end
