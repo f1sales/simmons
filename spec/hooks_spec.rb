@@ -177,14 +177,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Facebook - Dream Comfort - exclusivo'
+              name: 'Simmons - Facebook - Dream Comfort - Exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Facebook - Simmons - Dream Confort - exclusivo')
+        expect(switch_source).to eq('Facebook - Simmons - Dream Confort - Exclusivo')
       end
 
       it 'marks the lead as contacted' do
@@ -238,14 +238,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
+              name: 'Simmons - Widgrid - Dream Comfort - Exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - exclusivo')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - Exclusivo')
       end
 
       it 'post to simmons dream comfort' do
@@ -281,14 +281,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
+              name: 'Simmons - Widgrid - Dream Comfort - Exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - exclusivo')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Confort - Exclusivo')
       end
 
       it 'marks the lead as contacted' do
@@ -334,14 +334,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid - Dream Comfort - exclusivo'
+              name: 'Simmons - Widgrid - Dream Comfort - Exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort - exclusivo')
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort - Exclusivo')
       end
 
       it 'post to simmons dream comfort' do
@@ -472,7 +472,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Aldeota')
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Aldeota - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
@@ -525,7 +525,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Antonio Sales')
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Antonio Sales - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
@@ -568,7 +568,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Cambeba')
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Cambeba - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
@@ -611,7 +611,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Cambeba')
+          expect(switch_source).to eq('Widgrid - Simmons - Better Sleep Cambeba - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
@@ -658,7 +658,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Aldeota')
+          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Aldeota - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
@@ -703,7 +703,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Antonio Sales')
+          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Antonio Sales - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
@@ -748,7 +748,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
 
         it 'returns source name' do
-          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Cambeba')
+          expect(switch_source).to eq('Facebook - Simmons - Better Sleep Cambeba - Exclusivo')
         end
 
         it 'post to simmons dream comfort' do
