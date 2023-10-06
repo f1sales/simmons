@@ -18,23 +18,21 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Confortale - Sao Caetano do Sul',
-  'Rei do Sono',
-  'Decoramix - Penha',
-  'Grupo Alfa',
-  'Simmons Presence',
-  'Sublime Praia',
-  'Nigh Perfect Prime Pacaembu'
+  'Dreamcomfort Ipiranga',
+  'Sleep Design',
+  'Simmons Marilia',
+  'Farrel Colchoes',
+  'NH Colchoes',
+  'Simmons Conjunto Nacional'
 ]
 
 stores = [
-  'Santo Antonio - Av Goias, 750 - Confortale',
-  'Adrianopolis - Shopping Manauara, Loja 44 - Rei do Sono',
-  'Penha - Av Gov. Carvalho Pinto,1600 - Decoramix',
-  'Nova Campinas - Av Dr Hermas Braga, 328 - Grupo Alfa',
-  'Brooklin - Rua Joaquim Nabuco, 151 - Simmons Presence',
-  'Sarandi -  Avenida Sertorio, 8000 - Sublime Praia',
-  'Pacaembu - Av Pacaembu, 1553 - Night Perfect'
+  'Ipiranga - Avenida Nazare, 1634 - DreamComfort Colchoes',
+  'Pituba - Avenida Paulo VI, 1138 - Sleep Design',
+  'Centro - Rua Bandeirantes, 411 - Simmons Marilia',
+  'Asa Sul - SCS Quadra 8, Bloco B, Lotes 50/60, loja 79, setor comercial Sul - Farrel Colchoes',
+  'Nossa Senhora do Perpetuo Socorro - Rua Alcides Ramos Nogueira, 650 - NH Colchoes',
+  'Asa Norte - SDN, Conj A, Subsolo 1, Loja S85 / S88 - Simmons Conjunto Nacional'
 ]
 
 resp_s = []
@@ -49,12 +47,13 @@ stores.each_with_index do |store, i|
   admin_name = adm_names[i]
   admin_email = "#{emailize(team_name)}#{SIMMONS_EMAIL_DOMAIN}"
   team = Team.find_or_create_by!(name: team_name)
+  adm = Admin.where(email: admin_email).first
   puts team
   puts '-------'
   puts "Team: #{team.name} - ID: #{team.id}"
   puts '-------'
 
-  if Admin.where(email: admin_email).first.nil?
+  if adm.nil?
     admin_attr = { email: admin_email, password: (gen_password + gen_password), name: admin_name,
                    confirmed_at: Time.now, team: team }
     Admin.create!(admin_attr)
@@ -66,6 +65,9 @@ stores.each_with_index do |store, i|
     puts "Email: #{resp_a[n][:email]} -> Password: #{resp_a[n][:password]}"
     puts "Pattern: #{resp_a[n][:email]},#{resp_a[n][:password]}"
     puts '-------'
+  else
+    puts "\n\nAdmin: #{adm.email} already exists."
+    puts "Name: #{adm.name}, ID: #{adm.id}"
   end
 
   salesman_attr = { name: salesman_name, email: salesman_email, teams: [team], phone: rand(99_999_999_999),
@@ -83,3 +85,7 @@ stores.each_with_index do |store, i|
   puts '=======' * 10
   puts "\n\n\n"
 end
+
+# Admin that already exists, but is not in the spreadsheet
+# password  = (gen_password + gen_password)
+# Admin.where(email: email).first.update(password: password)
