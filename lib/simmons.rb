@@ -44,13 +44,21 @@ module Simmons
 
       def face_wid_le_source
         source_name_and_store_group_for_switch_source
-        return "#{source_name_swith_source} - exclusivo" if from_simmons_dreamcomfort?
+        return "#{source_name_swith_source} - Exclusivo" if exclusive?
 
         source_name_swith_source
       end
 
+      def exclusive?
+        from_simmons_dreamcomfort? || from_simmons_better_sleep?
+      end
+
       def from_simmons_dreamcomfort?
         source_name_swith_source['Simmons - Dream Comfort'] || source_name_swith_source['Simmons - Dream Confort']
+      end
+
+      def from_simmons_better_sleep?
+        source_name_swith_source['Simmons - Better Sleep']
       end
 
       def source_name_swith_source
@@ -214,7 +222,7 @@ module Simmons
                           splitted_name
                         end.reverse.join(' - ')
 
-        return "#{source_return} - Dream Comfort - exclusivo" if from_simmons_dreamcomfort?
+        return "#{source_return} - Dream Comfort - Exclusivo" if from_simmons_dreamcomfort?
 
         source_return
       end
