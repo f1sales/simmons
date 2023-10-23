@@ -54,7 +54,7 @@ module Simmons
       end
 
       def from_simmons_dreamcomfort?
-        source_name_swith_source['Simmons - Dream Comfort'] || source_name_swith_source['Simmons - Dream Confort']
+        source_name_swith_source[/Simmons - Dream ?Co[mn]fort/]
       end
 
       def from_simmons_better_sleep?
