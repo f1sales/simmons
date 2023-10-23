@@ -377,14 +377,14 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
               id: lead_id
             },
             source: {
-              name: 'Simmons - Widgrid'
+              name: 'Simmons - Widgrid - Dream Comfort - Exclusivo'
             }
           }
         }
       end
 
       it 'returns source name' do
-        expect(switch_source).to eq('Widgrid - Simmons - DreamComfort')
+        expect(switch_source).to eq('Widgrid - Simmons - DreamComfort - Exclusivo')
       end
 
       it 'marks the lead as contacted' do
