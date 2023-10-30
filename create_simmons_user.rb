@@ -18,21 +18,11 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Dreamcomfort Ipiranga',
-  'Sleep Design',
-  'Simmons Marilia',
-  'Farrel Colchoes',
-  'NH Colchoes',
-  'Simmons Conjunto Nacional'
+  'Simmons Cenario do Sono'
 ]
 
 stores = [
-  'Ipiranga - Avenida Nazare, 1634 - DreamComfort Colchoes',
-  'Pituba - Avenida Paulo VI, 1138 - Sleep Design',
-  'Centro - Rua Bandeirantes, 411 - Simmons Marilia',
-  'Asa Sul - SCS Quadra 8, Bloco B, Lotes 50/60, loja 79, setor comercial Sul - Farrel Colchoes',
-  'Nossa Senhora do Perpetuo Socorro - Rua Alcides Ramos Nogueira, 650 - NH Colchoes',
-  'Asa Norte - SDN, Conj A, Subsolo 1, Loja S85 / S88 - Simmons Conjunto Nacional'
+  'Setor Bueno - Avenida T 2 esq. com Avenida T-9, 540 - Simmons Exclusiva T9 Goiania'
 ]
 
 resp_s = []
@@ -41,7 +31,7 @@ stores.each_with_index do |store, i|
   # 1. admmin
   # 2. gen teams
   # 3. gen salesman
-  salesman_name, team_name = store.split('-')[1..].map(&:strip)
+  salesman_name, team_name = store.split(' - ')[1..].map(&:strip)
   salesman_email = emailize(salesman_name)
   salesman_email += SIMMONS_EMAIL_DOMAIN
   admin_name = adm_names[i]
@@ -84,7 +74,8 @@ stores.each_with_index do |store, i|
   puts '=======' * 10
   puts '=======' * 10
   puts "\n\n\n"
-end
+end;''
+
 
 # Admin that already exists, but is not in the spreadsheet
 # password  = (gen_password + gen_password)
