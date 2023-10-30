@@ -54,7 +54,7 @@ module Simmons
       end
 
       def from_simmons_dreamcomfort?
-        source_name_swith_source['Simmons - Dream Comfort'] || source_name_swith_source['Simmons - Dream Confort']
+        source_name_swith_source[/Simmons - Dream ?Co[mn]fort/]
       end
 
       def from_simmons_better_sleep?
@@ -132,7 +132,7 @@ module Simmons
         return if store_group_down['mocbettersleep']
 
         store_group_down = 'bettersleep' if store_group_down['bettersleep']
-        integrated_stores = %w[dreamcomfort dreamconfort mega bettersleep mattressone simmonsstore]
+        integrated_stores = %w[dreamcomfort dreamconfort bettersleep mattressone]
         return unless integrated_stores.include?(store_group_down)
 
         send("forward_to_#{store_group_down}")
@@ -142,10 +142,6 @@ module Simmons
 
       def forward_to_dreamcomfort
         create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
-      end
-
-      def forward_to_mega
-        create_lead_on('megacolchoes', lead_message)
       end
 
       def forward_to_dreamconfort
@@ -158,10 +154,6 @@ module Simmons
 
       def forward_to_mattressone
         create_lead_on('ortoluxo', lead_message)
-      end
-
-      def forward_to_simmonsstore
-        create_lead_on('megacolchoes', lead_message)
       end
 
       def create_lead_on(store, message)
