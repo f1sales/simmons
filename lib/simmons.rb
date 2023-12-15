@@ -135,20 +135,13 @@ module Simmons
         integrated_stores = %w[dreamcomfort dreamconfort bettersleep mattressone dreamcomfortcolchoes]
         return unless integrated_stores.include?(store_group_down)
 
+        store_group_down = 'dreamcomfort' if store_group_down['dream']
         send("forward_to_#{store_group_down}")
 
         @lead.interaction = :contacted
       end
 
       def forward_to_dreamcomfort
-        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
-      end
-
-      def forward_to_dreamconfort
-        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
-      end
-
-      def forward_to_dreamcomfortcolchoes
         create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
       end
 
