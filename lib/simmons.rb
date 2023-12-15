@@ -128,11 +128,11 @@ module Simmons
       end
 
       def handle_integrated_stores(store_group)
-        store_group_down = store_group.downcase.gsub(' ', '')
+        store_group_down = emailize(store_group)
         return if store_group_down['mocbettersleep']
 
         store_group_down = 'bettersleep' if store_group_down['bettersleep']
-        integrated_stores = %w[dreamcomfort dreamconfort bettersleep mattressone]
+        integrated_stores = %w[dreamcomfort dreamconfort bettersleep mattressone dreamcomfortcolchoes]
         return unless integrated_stores.include?(store_group_down)
 
         send("forward_to_#{store_group_down}")
@@ -145,6 +145,10 @@ module Simmons
       end
 
       def forward_to_dreamconfort
+        create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
+      end
+
+      def forward_to_dreamcomfortcolchoes
         create_lead_on('simmonsdreamcomfort', parse_message_to_dreamcomfort)
       end
 
