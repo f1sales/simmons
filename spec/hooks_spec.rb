@@ -145,66 +145,129 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
 
     context 'when source is from facebook' do
       let(:source_name) { 'Facebook - Simmons' }
-      let(:address) do
-        [
-          ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort',
-           'av._corifeu_de_azevedo_marques,_547_-_butantã'],
-          ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
-          ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
-          ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
-          ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
-        ].sample
-      end
-      let(:message) do
-        "conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: #{address.first}"
-      end
 
-      let(:lead_payload) do
-        {
-          lead: {
-            message: address.last,
-            description: 'Dream Confort',
-            customer: {
-              name: customer.name,
-              email: customer.email,
-              phone: customer.phone
-            },
-            product: {
-              name: product.name
-            },
-            transferred_path: {
-              from: 'simmons',
-              id: lead_id
-            },
-            source: {
-              name: 'Simmons - Facebook - Dream Comfort - Exclusivo'
+      context 'when lead is to Dream Comfort' do
+        let(:address) do
+          [
+            ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort',
+            'av._corifeu_de_azevedo_marques,_547_-_butantã'],
+            ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
+            ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
+            ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
+            ['Santana - Av Braz Leme, 757 - Dream Confort', 'av._braz_leme,_757_-_santana']
+          ].sample
+        end
+        let(:message) do
+          "conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: #{address.first}"
+        end
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: address.last,
+              description: 'Dream Confort',
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Facebook - Dream Comfort - Exclusivo'
+              }
             }
           }
-        }
-      end
-
-      it 'returns source name' do
-        expect(switch_source).to eq('Facebook - Simmons - Dream Confort - Exclusivo')
-      end
-
-      it 'marks the lead as contacted' do
-        begin
-          switch_source
-        rescue StandardError
-          nil
         end
 
-        expect(lead.interaction).to be(:contacted)
-      end
-
-      it 'post to simmons dream comfort' do
-        begin
-          switch_source
-        rescue StandardError
-          nil
+        it 'returns source name' do
+          expect(switch_source).to eq('Facebook - Simmons - Dream Confort - Exclusivo')
         end
 
-        expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        it 'marks the lead as contacted' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(lead.interaction).to be(:contacted)
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
+      end
+
+      context 'when lead is to Dream Comfort' do
+        let(:address) do
+          [
+            ['Perdizes - Av Sumare, 1101 - DreamComfort Colchões',
+             'perdizes_-_av_sumare,_1101_- dream_comfort']
+          ].sample
+        end
+        let(:message) do
+          "conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: #{address.first}"
+        end
+
+        let(:lead_payload) do
+          {
+            lead: {
+              message: address.last,
+              description: 'DreamComfort Colchões',
+              customer: {
+                name: customer.name,
+                email: customer.email,
+                phone: customer.phone
+              },
+              product: {
+                name: product.name
+              },
+              transferred_path: {
+                from: 'simmons',
+                id: lead_id
+              },
+              source: {
+                name: 'Simmons - Facebook - Dream Comfort - Exclusivo'
+              }
+            }
+          }
+        end
+
+        it 'returns source name' do
+          expect(switch_source).to eq('Facebook - Simmons - DreamComfort Colchões - Exclusivo')
+        end
+
+        it 'marks the lead as contacted' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(lead.interaction).to be(:contacted)
+        end
+
+        it 'post to simmons dream comfort' do
+          begin
+            switch_source
+          rescue StandardError
+            nil
+          end
+
+          expect(WebMock).to have_requested(:post, call_url).with(body: lead_payload)
+        end
       end
     end
 
