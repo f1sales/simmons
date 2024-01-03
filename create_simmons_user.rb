@@ -2,7 +2,7 @@
 
 def gen_password
   password = 3.times.map { rand(1..9) }.join('')
-  password += %i[@ $ ! & #].sample.to_s
+  password += %i[@ % - = & #].sample.to_s
   password += 3.times.map { rand(1..9) }.join('')
 
   password
@@ -18,15 +18,20 @@ Admin.skip_callback(:create, :after, :subscribe_mail_list)
 Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
-  'Simmons Cenario do Sono'
+  'Simmons Concept Uberaba',
+  'Grupo Yasin',
+  'Casa Vip'
 ]
 
 stores = [
-  'Setor Bueno - Avenida T 2 esq. com Avenida T-9, 540 - Simmons Exclusiva T9 Goiania'
+  'Santa Maria - Avenida Santa Beatriz da Silva, 1130 - Simmons Concept Uberaba',
+  'Itam Bibi - Avenida Presidente Juscelino Kubitschek, 900 - Grupo Yasin',
+  'Centro - Avenida Osvaldo Aranha, 806 - Casa Vip'
 ]
 
 resp_s = []
 resp_a = []
+
 stores.each_with_index do |store, i|
   # 1. admmin
   # 2. gen teams
