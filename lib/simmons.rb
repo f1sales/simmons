@@ -19,7 +19,7 @@ module Simmons
         if @source_name['Planilha']
           @source_name
         else
-          "#{@source_name} - #{lead_message}"
+          source_name_swith_source(lead_message)
         end
       end
 
@@ -30,8 +30,9 @@ module Simmons
         return unless face_wid_le?
         return if lead_message_down['sem loja']
 
-        store_name = store_name_for_switch_salesman
+        store_name = store_name_for_switch_salesman || ''
         store_name = 'av ibirapuera 2453' if store_name.downcase['av ibirapuera']
+        return if store_name.empty?
 
         { email: "#{emailize(store_name)}@simmons.com.br" }
       end
@@ -61,8 +62,8 @@ module Simmons
         source_name_swith_source['Simmons - Better Sleep']
       end
 
-      def source_name_swith_source
-        "#{@source_name} - #{@store_group}"
+      def source_name_swith_source(message = @store_group)
+        message.empty? ? @source_name : "#{@source_name} - #{message}"
       end
 
       def source_name_down
@@ -88,7 +89,7 @@ module Simmons
       end
 
       def store_group_for_facebook
-        @store_group = parse_facebook_lead.last
+        @store_group = parse_facebook_lead.last || ''
         handle_integrated_stores(@store_group)
       end
 
@@ -96,7 +97,7 @@ module Simmons
         @source_name = @source_name.split(' - ')[0..1].map(&:capitalize).join(' - ')
         return @store_group = 'Concierge' if lead_message_down == 'sem loja'
 
-        @store_group = parse_widgrid_lead(lead_message).last
+        @store_group = parse_widgrid_lead(lead_message)&.last || ''
         handle_integrated_stores(@store_group)
       end
 
@@ -106,7 +107,7 @@ module Simmons
         elsif @source_name['Facebook']
           parse_facebook_lead[1]
         elsif @source_name.downcase['widgrid'] || source_name_down['lead de']
-          parse_widgrid_lead(lead_message)[1]
+          parse_widgrid_lead(lead_message)[1] || ''
         end
       end
 
@@ -115,7 +116,7 @@ module Simmons
       end
 
       def parse_widgrid_lead(message)
-        message.split(' - ')[2..]
+        message.split(' - ')[2..] || []
       end
 
       def emailize(string)
