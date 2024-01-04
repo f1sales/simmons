@@ -150,7 +150,7 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         let(:address) do
           [
             ['Butanta - Av Corifeu de Azevedo Marques, 547 - Dream Confort',
-            'av._corifeu_de_azevedo_marques,_547_-_butantã'],
+             'av._corifeu_de_azevedo_marques,_547_-_butantã'],
             ['Moema - Av Ibirapuera, 2453 - Dream Confort', 'av._ibirapuera,_2453_-_moema'],
             ['Moema - Av Ibirapuera, 3000 - Dream Confort', 'av._ibirapuera,_3000_-_moema'],
             ['Moema - Av Ibirapuera, 3399 - Dream Confort', 'av._ibirapuera,_3399_-_moema'],
@@ -1220,6 +1220,67 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
       end
 
       expect(lead.interaction).to be_nil
+    end
+  end
+
+  context 'when lead is created manually' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = ''
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'Facebook - Simmons - '
+
+      source
+    end
+
+    it 'returns source Lead de empresas' do
+      expect(switch_source).to eq('Facebook - Simmons - ')
+    end
+
+    it 'returns salesman' do
+      expect(switch_salesman).to be_nil
+    end
+
+    context 'when source is Widgrid' do
+      before { source.name = 'Widgrid - Simmons' }
+
+      it 'returns source Lead de empresas' do
+        expect(switch_source).to eq('Widgrid - Simmons')
+      end
+
+      it 'returns salesman' do
+        expect(switch_salesman).to be_nil
+      end
+    end
+
+    context 'when source is Lead de empresas' do
+      before { source.name = 'Lead de empresas' }
+
+      it 'returns source Lead de empresas' do
+        expect(switch_source).to eq('Lead de empresas')
+      end
+
+      it 'returns salesman' do
+        expect(switch_salesman).to be_nil
+      end
+    end
+
+    context 'when source is Another source' do
+      before { source.name = 'Another source' }
+
+      it 'returns source Lead de empresas' do
+        expect(switch_source).to eq('Another source')
+      end
+
+      it 'returns salesman' do
+        expect(switch_salesman).to be_nil
+      end
     end
   end
 end
