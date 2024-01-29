@@ -19,14 +19,12 @@ Salesman.skip_callback(:create, :after, :send_sign_up_instructions)
 
 adm_names = [
   'Simmons Concept Uberaba',
-  'Grupo Yasin',
-  'Casa Vip'
+  'Grupo Yasin'
 ]
 
 stores = [
   'Santa Maria - Avenida Santa Beatriz da Silva, 1130 - Simmons Concept Uberaba',
-  'Itam Bibi - Avenida Presidente Juscelino Kubitschek, 900 - Grupo Yasin',
-  'Centro - Avenida Osvaldo Aranha, 806 - Casa Vip'
+  'Itam Bibi - Avenida Presidente Juscelino Kubitschek, 900 - Grupo Yasin'
 ]
 
 resp_s = []
