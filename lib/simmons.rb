@@ -31,7 +31,6 @@ module Simmons
         return if lead_message_down['sem loja']
 
         store_name = store_name_for_switch_salesman || ''
-        store_name = 'av ibirapuera 2453' if store_name.downcase['av ibirapuera']
         return if store_name.empty?
 
         { email: "#{emailize(store_name)}@simmons.com.br" }
@@ -133,7 +132,7 @@ module Simmons
         return if store_group_down['mocbettersleep']
 
         store_group_down = 'bettersleep' if store_group_down['bettersleep']
-        integrated_stores = %w[dreamcomfort dreamconfort bettersleep mattressone dreamcomfortcolchoes]
+        integrated_stores = %w[dreamconfort bettersleep mattressone dreamcomfortcolchoes]
         return unless integrated_stores.include?(store_group_down)
 
         send("forward_to_#{store_group_down}")
@@ -210,52 +209,6 @@ module Simmons
         return "#{source_return} - Dream Comfort - Exclusivo" if from_simmons_dreamcomfort?
 
         source_return
-      end
-
-      def parse_message_to_dreamcomfort
-        return 'av._corifeu_de_azevedo_marques,_547_-_butantã' if corifeu?
-        return ibirapuera_message if av_ibirapuera?
-        return 'av._braz_leme,_757_-_santana' if braz_leme?
-        return 'perdizes_-_av_sumare,_1101_- dream_comfort' if sumare?
-        return 'morumbi_-_av_avenida_morumbi,_6930' if morumbi?
-      end
-
-      def corifeu?
-        lead_message_down['av corifeu de azevedo marques, 547']
-      end
-
-      def ibirapuera_3399?
-        lead_message_down['av ibirapuera, 3399']
-      end
-
-      def ibirapuera_3000?
-        lead_message_down['av ibirapuera, 3000']
-      end
-
-      def ibirapuera_2453?
-        lead_message_down['av ibirapuera, 2453']
-      end
-
-      def braz_leme?
-        lead_message_down['braz leme, 757']
-      end
-
-      def sumare?
-        lead_message_down['av sumare, 1101']
-      end
-
-      def morumbi?
-        lead_message_down['av avenida morumbi, 6930']
-      end
-
-      def av_ibirapuera?
-        lead_message_down['av ibirapuera']
-      end
-
-      def ibirapuera_message
-        return 'av._ibirapuera,_3399_-_moema' if ibirapuera_3399?
-        return 'av._ibirapuera,_3000_-_moema' if ibirapuera_3000?
-        return 'av._ibirapuera,_2453_-_moema' if ibirapuera_2453?
       end
     end
   end

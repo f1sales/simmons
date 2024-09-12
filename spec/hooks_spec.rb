@@ -68,6 +68,33 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
   end
 
+  context 'when came from widgrid MOEMA' do
+    let(:lead) do
+      lead = OpenStruct.new
+      lead.source = source
+      lead.message = 'Simmons - ESC - Moema - Av Ibirapuera, 3000 - Dream Comfort CEP: 04028-003'
+
+      lead
+    end
+
+    let(:source) do
+      source = OpenStruct.new
+      source.name = 'WIDGRID - SIMMONS - ENCONTRE SEU COLCHÃO'
+
+      source
+    end
+
+    context 'when has store group' do
+      it 'returns source name' do
+        expect(switch_source).to eq('Widgrid - Simmons - Dream Comfort CEP: 04028-003 - Exclusivo')
+      end
+
+      it 'returns salesman email' do
+        expect(switch_salesman).to eq({ email: 'avibirapuera3000@simmons.com.br' })
+      end
+    end
+  end
+
   context 'when came from widgrid' do
     let(:lead) do
       lead = OpenStruct.new
@@ -655,16 +682,6 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
     end
 
     context 'when the address is Av. Ibirapuera, 2453' do
-      it 'returns salesman email' do
-        expect(switch_salesman).to eq({ email: 'avibirapuera2453@simmons.com.br' })
-      end
-    end
-
-    context 'when the address is Av. Ibirapuera, 3000' do
-      before do
-        lead.message = 'conditional_question_1: São Paulo; conditional_question_2: São Paulo; conditional_question_3: Moema - Av Ibirapuera, 3000 - Dream Confort'
-      end
-
       it 'returns salesman email' do
         expect(switch_salesman).to eq({ email: 'avibirapuera2453@simmons.com.br' })
       end
