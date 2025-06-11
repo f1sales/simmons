@@ -66,6 +66,30 @@ RSpec.describe F1SalesCustom::Hooks::Lead do
         end
       end
     end
+
+    context 'when conditional_question_3 matches one of the Manaus special locations' do
+      before do
+        lead.source.name = 'Facebook - Simmons'
+      end
+
+      it 'routes Chapada – Av Theomario P da Costa, 610 leads to the Manaus rep' do
+        lead.message = [
+          'conditional_question_1: Amazonas',
+          'conditional_question_2: Manaus',
+          'conditional_question_3: Chapada - Av Theomario P da Costa, 610 - Rei do Sono'
+        ].join('; ')
+        expect(switch_salesman).to eq({ email: 'shoppingmanauaraloja44@simmons.com.br' })
+      end
+
+      it 'routes Parque Dez de Dezembro – Amazonas Shopping leads to the Manaus rep' do
+        lead.message = [
+          'conditional_question_1: Amazonas',
+          'conditional_question_2: Manaus',
+          'conditional_question_3: Parque Dez de Dezembro - Amazonas Shopping - Simmons Manaus'
+        ].join('; ')
+        expect(switch_salesman).to eq({ email: 'shoppingmanauaraloja44@simmons.com.br' })
+      end
+    end
   end
 
   context 'when came from widgrid MOEMA' do

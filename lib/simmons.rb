@@ -10,6 +10,11 @@ module Simmons
 
   class F1SalesCustom::Hooks::Lead
     class << self
+      MANAUS_ADDRESSES = [
+        'Av Theomario P da Costa, 610',
+        'Amazonas Shopping'
+      ].freeze
+
       def switch_source(lead)
         @lead = lead
         @source_name = @lead.source.name
@@ -26,6 +31,9 @@ module Simmons
       def switch_salesman(lead)
         @lead = lead
         @source_name = @lead.source.name
+
+        redirect = manaus_salesman_redirect
+        return redirect if redirect
 
         return unless face_wid_le?
         return if lead_message_down['sem loja']
@@ -209,6 +217,16 @@ module Simmons
         return "#{source_return} - Dream Comfort - Exclusivo" if from_simmons_dreamcomfort?
 
         source_return
+      end
+
+      def manaus_salesman_redirect
+        if @source_name.include?('Facebook')
+          address = parse_facebook_lead[1] || ''
+
+          if MANAUS_ADDRESSES.any? { |addr| address.include?(addr) }
+            return { email: 'shoppingmanauaraloja44@simmons.com.br' }
+          end
+        end
       end
     end
   end
