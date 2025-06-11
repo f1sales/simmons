@@ -10,6 +10,11 @@ module Simmons
 
   class F1SalesCustom::Hooks::Lead
     class << self
+      MANAUS_ADDRESSES = [
+        'Av Theomario P da Costa, 610',
+        'Amazonas Shopping'
+      ].freeze
+
       def switch_source(lead)
         @lead = lead
         @source_name = @lead.source.name
@@ -217,12 +222,8 @@ module Simmons
       def manaus_salesman_redirect
         if @source_name.include?('Facebook')
           address = parse_facebook_lead[1] || ''
-          special_addresses = [
-            'Av Theomario P da Costa, 610',
-            'Amazonas Shopping'
-          ]
 
-          if special_addresses.any? { |addr| address.include?(addr) }
+          if MANAUS_ADDRESSES.any? { |addr| address.include?(addr) }
             return { email: 'shoppingmanauaraloja44@simmons.com.br' }
           end
         end
